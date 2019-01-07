@@ -4,13 +4,14 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>dff6d3da-6006-456f-bdae-530e446896e3</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>PythonPlays.py</StartupFile>
+    <StartupFile>pythonPlays.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>PythonPlays</Name>
     <RootNamespace>PythonPlays</RootNamespace>
+    <InterpreterId>MSBuild|PythonPlaysEnv|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +22,51 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="PythonPlays.py" />
+    <Compile Include="balanceData.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="createTrainingData.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="grabScreen.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="imageProcessing.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="keyInputs.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="logKeyInputs.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="objectDetection.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="pythonPlays.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="requirements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="PythonPlaysEnv\">
+      <Id>PythonPlaysEnv</Id>
+      <Version>3.6</Version>
+      <Description>PythonPlaysEnv (Python 3.6 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
+    <Interpreter Include="Tensorflow\">
+      <Id>Tensorflow</Id>
+      <Version>3.6</Version>
+      <Description>Tensorflow (Python 3.6 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
