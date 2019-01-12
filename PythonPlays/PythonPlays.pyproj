@@ -46,7 +46,6 @@
     <Compile Include="pythonPlays.py" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="libraries.txt" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
