@@ -18,7 +18,7 @@ def start_playing():
     last_time = time.time()
     while True:
         # windowed mode
-        screen =  grabScreen. grab_screen_RGB(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
+        screen =  grabScreen. grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
         
         # Image processing goes here if needed
 

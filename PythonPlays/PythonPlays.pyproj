@@ -37,9 +37,6 @@
     <Compile Include="keyInputs.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="logKeyInputs.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="objectDetection.py">
       <SubType>Code</SubType>
     </Compile>
