@@ -70,22 +70,22 @@ class Input(ctypes.Structure):
 def PressKey(hexKeyCode):
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
-    ii_.ki = KeyBdInput( 0, hexKeyCode, 0x0008, 0, ctypes.pointer(extra) )
-    x = Input( ctypes.c_ulong(1), ii_ )
+    ii_.ki = KeyBdInput(0, hexKeyCode, 0x0008, 0, ctypes.pointer(extra))
+    x = Input(ctypes.c_ulong(1), ii_)
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
 def ReleaseKey(hexKeyCode):
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
-    ii_.ki = KeyBdInput( 0, hexKeyCode, 0x0008 | 0x0002, 0, ctypes.pointer(extra) )
-    x = Input( ctypes.c_ulong(1), ii_ )
+    ii_.ki = KeyBdInput(0, hexKeyCode, 0x0008 | 0x0002, 0, ctypes.pointer(extra))
+    x = Input(ctypes.c_ulong(1), ii_)
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
 def MouseLeftClick():
     ctypes.windll.user32.GetCursorInfo()
     ctypes.windll.user32.SetCursorPos(100, 20)
-    ctypes.windll.user32.mouse_event(2, 0, 0, 0,0) # left down
-    ctypes.windll.user32.mouse_event(4, 0, 0, 0,0) # left up
+    ctypes.windll.user32.mouse_event(2, 0, 0, 0, 0) # left down
+    ctypes.windll.user32.mouse_event(4, 0, 0, 0, 0) # left up
 
 def straight():
     PressKey(SPACE)

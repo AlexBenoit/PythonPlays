@@ -262,3 +262,5 @@ __pycache__/
 
 # Python virtual environment
 PythonPlaysEnv/
+CoreComponentsEnv/
+PlayRecorderEnv/

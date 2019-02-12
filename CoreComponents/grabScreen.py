@@ -8,8 +8,8 @@ def grab_screen_RGBA(region=None):
 
     if region:
             left,top,x2,y2 = region
-            width = x2 - left + 1
-            height = y2 - top + 1
+            width = x2 - left
+            height = y2 - top
     else:
         width = win32api.GetSystemMetrics(win32con.SM_CXVIRTUALSCREEN)
         height = win32api.GetSystemMetrics(win32con.SM_CYVIRTUALSCREEN)
@@ -26,7 +26,7 @@ def grab_screen_RGBA(region=None):
     
     signedIntsArray = bmp.GetBitmapBits(True)
     img = np.fromstring(signedIntsArray, dtype='uint8')
-    img.shape = (height,width,4)
+    img.shape = (height, width,4)
 
     srcdc.DeleteDC()
     memdc.DeleteDC()
@@ -40,3 +40,7 @@ def grab_screen_RGB(region=None):
 
 def grab_screen_GRAY(region=None):
     return cv2.cvtColor(grab_screen_RGBA(region), cv2.COLOR_RGBA2GRAY)
+
+if __name__ == "__main__":
+    screen = grab_screen_RGBA(region=(0, 0, 1280, 720))
+    print(screen.shape)

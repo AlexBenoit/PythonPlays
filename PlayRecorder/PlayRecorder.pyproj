@@ -2,16 +2,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>dff6d3da-6006-456f-bdae-530e446896e3</ProjectGuid>
+    <ProjectGuid>25033419-b42e-4f9e-a68a-48f8cb53c495</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>pythonPlays.py</StartupFile>
+    <StartupFile>PlayRecorder.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>PythonPlays</Name>
-    <RootNamespace>PythonPlays</RootNamespace>
-    <InterpreterId>MSBuild|PythonPlaysEnv|$(MSBuildProjectFullPath)</InterpreterId>
+    <Name>PlayRecorder</Name>
+    <RootNamespace>PlayRecorder</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,36 +21,11 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="imageProcessing.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="keyInputs.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="pythonPlays.py" />
-    <Compile Include="smashMeleeActions.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="tensorflowNN.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="createTrainingData.py" />
+    <Compile Include="PlayRecorder.py" />
     <Compile Include="__init__.py">
       <SubType>Code</SubType>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="requirements.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Interpreter Include="PythonPlaysEnv\">
-      <Id>PythonPlaysEnv</Id>
-      <Version>3.6</Version>
-      <Description>PythonPlaysEnv (Python 3.6 (64-bit))</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CoreComponents\CoreComponents.pyproj">

@@ -3,28 +3,38 @@
 import numpy as np
 import cv2
 import time
+import random
 import keyInputs
 import imageProcessing as imgProc
 import grabScreen
+import tensorflowNN
+import smashMeleeActions
+import tensorflow as tf
 
 print("starting")
 
 WINDOW_X = 1                                # Default image position for a window perfectly in top left corner
 WINDOW_Y = 38                               # Default image position for a window perfectly in top left corner
-WINDOW_WIDTH = 1280 - WINDOW_X * 2          # Modify these values for a window snapped in top left corner
-WINDOW_HEIGHT = 720 - WINDOW_Y - WINDOW_X   # Modify these values for a window snapped in top left corner
+WINDOW_WIDTH = 1280                         # Modify these values for a window snapped in top left corner
+WINDOW_HEIGHT = 720                         # Modify these values for a window snapped in top left corner
 
 def start_playing():
+    functionList = dir(smashMeleeActions)[8:]
+    model = tensorflowNN.create_model((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X), len(functionList))
+
     last_time = time.time()
+
     while True:
         # windowed mode
-        screen =  grabScreen. grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
-        
+        screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
+
         # Image processing goes here if needed
 
         cv2.imshow("window", screen) # Window showing what is captured
 
         # Decision making goes here
+        predictions = model.predict(np.array([screen]))
+        getattr(smashMeleeActions, functionList[random.randint(0, len(functionList) - 1)])()
 
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
@@ -32,7 +42,7 @@ def start_playing():
 
         print('loop took {} seconds'.format(time.time()-last_time))
         last_time = time.time()
-
+        
     print("done")
 
 def main():
