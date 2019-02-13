@@ -14,8 +14,8 @@ def up():
     print("up")
 
 def right():
-    keyInputs.pressKey(keyInputs.ARROW_LEFT)
-    keyInputs.releaseKey(keyInputs.ARROW_RIGHT)
+    keyInputs.releaseKey(keyInputs.ARROW_LEFT)
+    keyInputs.pressKey(keyInputs.ARROW_RIGHT)
     print("right")
 
 def down():
