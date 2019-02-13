@@ -1,15 +1,22 @@
+import keyInputs
 
 def do_nothing():
+    keyInputs.releaseKey(keyInputs.ARROW_LEFT)
+    keyInputs.releaseKey(keyInputs.ARROW_RIGHT)
     print("Do nothing")
 
 def left():
+    keyInputs.pressKey(keyInputs.ARROW_LEFT)
+    keyInputs.releaseKey(keyInputs.ARROW_RIGHT)
     print("left")
 
 def up():
     print("up")
 
 def right():
-    print("rigth")
+    keyInputs.pressKey(keyInputs.ARROW_LEFT)
+    keyInputs.releaseKey(keyInputs.ARROW_RIGHT)
+    print("right")
 
 def down():
     print("down")

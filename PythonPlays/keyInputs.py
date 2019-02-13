@@ -67,43 +67,25 @@ class Input(ctypes.Structure):
                 ("ii", Input_I)]
 
 # Actuals Functions
-def PressKey(hexKeyCode):
+def pressKey(hexKeyCode):
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
     ii_.ki = KeyBdInput(0, hexKeyCode, 0x0008, 0, ctypes.pointer(extra))
     x = Input(ctypes.c_ulong(1), ii_)
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
-def ReleaseKey(hexKeyCode):
+def releaseKey(hexKeyCode):
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
     ii_.ki = KeyBdInput(0, hexKeyCode, 0x0008 | 0x0002, 0, ctypes.pointer(extra))
     x = Input(ctypes.c_ulong(1), ii_)
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
-def MouseLeftClick():
+def mouseLeftClick():
     ctypes.windll.user32.GetCursorInfo()
     ctypes.windll.user32.SetCursorPos(100, 20)
     ctypes.windll.user32.mouse_event(2, 0, 0, 0, 0) # left down
     ctypes.windll.user32.mouse_event(4, 0, 0, 0, 0) # left up
-
-def straight():
-    PressKey(SPACE)
-    ReleaseKey(L_CONTROL)
-    ReleaseKey(ARROW_LEFT)
-    ReleaseKey(ARROW_RIGHT)
-
-def left():
-    PressKey(ARROW_LEFT)
-    ReleaseKey(SPACE)
-    ReleaseKey(L_CONTROL)  
-    ReleaseKey(ARROW_RIGHT)
-
-def right():
-    PressKey(ARROW_RIGHT)
-    ReleaseKey(SPACE)
-    ReleaseKey(L_CONTROL)  
-    ReleaseKey(ARROW_LEFT)
     
 if __name__ == '__main__':
     PressKey(0x11)
