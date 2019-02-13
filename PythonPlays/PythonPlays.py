@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import time
 import random
+import keyboard
 import keyInputs
 import imageProcessing as imgProc
 import grabScreen
@@ -25,20 +26,21 @@ def start_playing():
     last_time = time.time()
 
     while True:
+        if keyboard.is_pressed("q"):
+            cv2.destroyAllWindows()
+            break
+
         # windowed mode
         screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
 
         # Image processing goes here if needed
 
         cv2.imshow("window", screen) # Window showing what is captured
+        cv2.waitKey(1)
 
         # Decision making goes here
         predictions = model.predict(np.array([screen]))
         getattr(smashMeleeActions, functionList[random.randint(0, len(functionList) - 1)])()
-
-        if cv2.waitKey(25) & 0xFF == ord('q'):
-            cv2.destroyAllWindows()
-            break
 
         print('loop took {} seconds'.format(time.time()-last_time))
         last_time = time.time()

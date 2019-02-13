@@ -11,6 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>PlayRecorder</Name>
     <RootNamespace>PlayRecorder</RootNamespace>
+    <InterpreterId>MSBuild|PlayRecorderEnv|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,6 +24,9 @@
   <ItemGroup>
     <Compile Include="createTrainingData.py" />
     <Compile Include="PlayRecorder.py" />
+    <Compile Include="Tests\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__init__.py">
       <SubType>Code</SubType>
     </Compile>
@@ -33,6 +37,20 @@
       <Project>{792c0e65-c099-4e9c-9328-3ca665f27e36}</Project>
       <Private>True</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="PlayRecorderEnv\">
+      <Id>PlayRecorderEnv</Id>
+      <Version>3.7</Version>
+      <Description>PlayRecorderEnv (Python 3.7 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tests\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
