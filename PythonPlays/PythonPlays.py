@@ -40,7 +40,10 @@ def start_playing():
 
         # Decision making goes here
         predictions = model.predict(np.array([screen]))
-        getattr(smashMeleeActions, functionList[random.randint(0, len(functionList) - 1)])()
+        try:
+            getattr(smashMeleeActions, functionList[random.randint(0, len(functionList) - 1)])()
+        except:
+            print("Action failed")
 
         print('loop took {} seconds'.format(time.time()-last_time))
         last_time = time.time()
