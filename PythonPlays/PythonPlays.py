@@ -22,7 +22,7 @@ WINDOW_HEIGHT = 720                         # Modify these values for a window s
 def start_playing():
     functionList = dir(smashMeleeActions)[8:]
     model = tensorflowNN.create_model((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X), len(functionList))
-
+    screen = None
     last_time = time.time()
 
     while True:
@@ -31,6 +31,7 @@ def start_playing():
             break
 
         # windowed mode
+        oldScreen = screen
         screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
 
         # Image processing goes here if needed
