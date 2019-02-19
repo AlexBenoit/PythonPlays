@@ -1,5 +1,4 @@
 import unittest
-import createTrainingData
 
 class Test_keyboard_capture(unittest.TestCase):
     def test_A(self):
