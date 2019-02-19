@@ -1,5 +1,5 @@
 numpy==1.16.0
 opencv-python==4.0.0.21
 tensorflow==1.12.0
-pypiwin32==223
+pypiwin32
 keyboard==0.13.2
