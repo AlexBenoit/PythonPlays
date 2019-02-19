@@ -24,6 +24,9 @@
   <ItemGroup>
     <Compile Include="createTrainingData.py" />
     <Compile Include="PlayRecorder.py" />
+    <Compile Include="Tests\test_keyboard_capture.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tests\__init__.py">
       <SubType>Code</SubType>
     </Compile>

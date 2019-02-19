@@ -1,2 +1,5 @@
+import sys
 
-import CoreComponents.grabScreen
+hello = "hello"
+if __name__ == '__main__':
+    print("main")

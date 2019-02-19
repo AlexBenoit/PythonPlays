@@ -35,6 +35,9 @@
     <Compile Include="tensorflowNN.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tests\test_model.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tests\__init__.py">
       <SubType>Code</SubType>
     </Compile>
