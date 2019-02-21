@@ -46,6 +46,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="constraints.txt" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
