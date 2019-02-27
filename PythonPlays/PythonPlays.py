@@ -13,8 +13,6 @@ import tensorflowNN
 import smashMeleeActions
 import tensorflow as tf
 
-print("starting")
-
 WINDOW_X = 1                                # Default image position for a window perfectly in top left corner
 WINDOW_Y = 38                               # Default image position for a window perfectly in top left corner
 WINDOW_WIDTH = 1280                         # Modify these values for a window snapped in top left corner
@@ -30,9 +28,8 @@ def start_playing():
     
 
     model = tensorflowNN.create_model((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X), len(functionList))
-    
     i = 1
-
+    screen = None
     last_time = time.time()
 
     while True:
@@ -43,6 +40,7 @@ def start_playing():
 
 
         # windowed mode
+        oldScreen = screen
         screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
         # Image processing goes here if needed
         crop_img6 = screen[580:580+DIGIT_HEIGHT, 545:545+DIGIT_WIDTH]
@@ -122,7 +120,7 @@ def start_playing():
     print("done")
 
 def main():
-
+    print("starting")
     for i in range(4):
         print(i+1)
         time.sleep(1)

@@ -1,7 +1,7 @@
 import unittest
 
-class Test_grabScreen(unittest.TestCase):
-    def test_something(self):
+class Test_model(unittest.TestCase):
+    def test_A(self):
         self.assertFalse(False)
 
 if __name__ == '__main__':

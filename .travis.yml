@@ -1,0 +1,16 @@
+language: python
+python: 
+  - "3.6"
+os: windows
+install:
+  - cd PythonPlays
+  - pip install -r requirements.txt
+  - cd ..
+  - cd PlayRecorder
+  - pip install -r requirements.txt
+  - cd ..
+  - cd CoreComponents
+  - pip install -r requirements.txt
+  - cd ..
+script:
+  - python -m unittest discover 

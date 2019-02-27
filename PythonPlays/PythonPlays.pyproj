@@ -38,6 +38,9 @@
     <Compile Include="tensorflowNN.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tests\test_model.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tests\__init__.py">
       <SubType>Code</SubType>
     </Compile>
@@ -46,6 +49,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="constraints.txt" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
