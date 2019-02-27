@@ -11,6 +11,8 @@ import grabScreen
 import tensorflowNN
 import smashMeleeActions
 import tensorflow as tf
+from windowPositioning import openWindow, positionWindow
+
 
 WINDOW_X = 1                                # Default image position for a window perfectly in top left corner
 WINDOW_Y = 38                               # Default image position for a window perfectly in top left corner
@@ -55,6 +57,9 @@ def main():
         print(i+1)
         time.sleep(1)
 
+
+    openWindow()
+    positionWindow()
     start_playing()
 
 if __name__ == '__main__':
