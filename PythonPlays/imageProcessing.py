@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+import cv2
+import skimage
+from sklearn.externals import joblib
+from skimage.feature import hog
+import numpy as np
+=======
 import numpy as np
 import cv2
 from numpy import ones,vstack
@@ -6,6 +13,7 @@ from statistics import mean
 
 WINDOW_HEIGHT = 600
 VERTICES = np.array([[10, 500], [10,300], [300,200], [500,200], [800,300], [800,500]], np.int32)
+>>>>>>> 27d73454c6626e021fe6911e56a2e9eb33dab7a5
 
 def process_img(image):
     original_image = image
@@ -13,6 +21,17 @@ def process_img(image):
     # convert to gray and edge detection
     processed_img =  cv2.Canny(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY), threshold1 = 200, threshold2=300)
 
+<<<<<<< HEAD
+    return pourcentage1, pourcentage2
+
+
+
+if __name__ == '__main__':
+   print('fuck')
+   clf = joblib.load("digits_cls.pkl")
+   im = cv2.imread("photo_2.jpg")
+   cv2.imshow("Resulting Image with Rectangular ROIs", im)
+=======
     processed_img = cv2.GaussianBlur(processed_img, (5,5), 0)
 
     processed_img = roi(processed_img, [VERTICES])
@@ -145,3 +164,4 @@ def draw_lanes(img, lines, color=[0, 255, 255], thickness=3):
         return [l1_x1, l1_y1, l1_x2, l1_y2], [l2_x1, l2_y1, l2_x2, l2_y2], lane1_id, lane2_id
     except Exception as e:
         print(str(e))
+>>>>>>> 27d73454c6626e021fe6911e56a2e9eb33dab7a5
