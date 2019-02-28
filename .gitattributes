@@ -58,3 +58,4 @@
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
 Dolphin/ISOs/Super[[:space:]]Smash[[:space:]]Bros.[[:space:]]Melee[[:space:]](USA).iso filter=lfs diff=lfs merge=lfs -text
+Dolphin/ISOs/* filter=lfs diff=lfs merge=lfs -text
