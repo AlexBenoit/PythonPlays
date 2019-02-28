@@ -15,10 +15,7 @@ def positionWindow():#(handle, x, y, width, height):
 def openWindow(): 
 
     pwd = os.getcwd()
-
-
-    subprocess.Popen([pwd +'\Dolphin\Dolphin.exe', '-b', '-e=' + pwd + '\Dolphin\SSBM.iso']) #Hard coded path
+    
+    print(pwd)
+    subprocess.Popen([pwd +'\..\Dolphin\Dolphin.exe', '-b', '-e=' + pwd + '\..\Dolphin\ISOs\Super Smash Bros. Melee (USA).iso']) #Hard coded path
     time.sleep(2) #laisse le temps a l'emulateur de launch
-
-
-if __name__ == '__main__':

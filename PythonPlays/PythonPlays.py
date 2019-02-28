@@ -130,7 +130,7 @@ def main():
 
     openWindow()
     positionWindow()
-    start_playing()
+    #start_playing()
 
 if __name__ == '__main__':
     main()
