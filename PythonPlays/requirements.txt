@@ -14,7 +14,7 @@ Keras-Applications==1.0.7
 Keras-Preprocessing==1.0.9
 kiwisolver==1.0.1
 Markdown==3.0.1
-pip==19.0.2
+pip==19.0.3
 protobuf==3.6.1
 pyparsing==2.3.1
 python-dateutil==2.8.0

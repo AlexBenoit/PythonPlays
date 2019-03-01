@@ -7,8 +7,6 @@ import time
 from sklearn.neural_network import MLPClassifier
 
 class TextAnalyzer:
-       
-   
 
     def __init__(self):
         #load sample and train 
@@ -78,7 +76,7 @@ class TextAnalyzer:
         mlp = MLPClassifier(hidden_layer_sizes=(200, 300, 100), max_iter=1000)
         print(len(training_cells_smash))
         print(len(cells_labels))
-        mlp.fit(training_cells_smash, cells_labels)
+        #mlp.fit(training_cells_smash, cells_labels)
 
 
         self.mlp = mlp
@@ -90,9 +88,9 @@ class TextAnalyzer:
         d = img.flatten()
         test_cells_smash.append(d)
         test_cells_smash = np.array(test_cells_smash,dtype=np.float32)
-        predictions = self.mlp.predict(test_cells_smash)
+        #predictions = self.mlp.predict(test_cells_smash)
        
-        return  predictions[0]
+        #return  predictions[0]
         
 if __name__ == "__main__":
     digitAnalzer = TextAnalyzer()

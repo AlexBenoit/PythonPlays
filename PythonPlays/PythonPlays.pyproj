@@ -32,7 +32,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="pythonPlays.py" />
-    <Compile Include="smashMeleeActions.py">
+    <Compile Include="smashMeleeInputs.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tensorflowNN.py">

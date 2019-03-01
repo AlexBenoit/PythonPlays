@@ -6,11 +6,12 @@ import time
 import random
 import keyboard
 import keyInputs
+import numpy
 import imageProcessing as imgProc
 import grabScreen
 from textAnalyzer import TextAnalyzer
 import tensorflowNN
-import smashMeleeActions
+import smashMeleeInputs
 import tensorflow as tf
 from windowPositioning import openWindow, positionWindow
 
@@ -18,24 +19,26 @@ from windowPositioning import openWindow, positionWindow
 WINDOW_X = 7                                # Default image position for a window perfectly in top left corner
 WINDOW_Y = 55                               # Default image position for a window perfectly in top left corner
 WINDOW_WIDTH = 1247                         # Modify these values for a window snapped in top left corner
-WINDOW_HEIGHT = 700                         # Modify these values for a window snapped in top left corner
+WINDOW_HEIGHT = 700  
 
 DIGIT_WIDTH = 45
 DIGIT_HEIGHT = 55
 
 def start_playing():
-    functionList = dir(smashMeleeActions)[8:]
+    inputArray = numpy.zeros(smashMeleeInputs.getSmashMeleeInputs())
+    oldInputArray = inputArray
     #load the digit recognition learning
     #digitAnalzer = TextAnalyzer()
     
 
-    model = tensorflowNN.create_model((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X), len(functionList))
+    decisionModel = tensorflowNN.create_model((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X), len(inputArray))
     i = 1
     screen = None
     last_time = time.time()
 
     while True:
         if keyboard.is_pressed("q"):
+            #TODO: add dolphin termination
             cv2.destroyAllWindows()
             break
 
@@ -97,20 +100,34 @@ def start_playing():
         
        
 
-        cv2.imshow("window", screen) # Window showing what is captured
-        cv2.waitKey(1)
+        #cv2.imshow("window", screen) # Window showing what is captured
+        #cv2.waitKey(1)
 
         # Decision making goes here
-        predictions = model.predict(np.array([screen]))
-        try:
-            getattr(smashMeleeActions, functionList[random.randint(0, len(functionList) - 1)])()
-        except:
-            print("Action failed")
-
+        predictions = decisionModel.predict(np.array([screen]))[0]
+        updateKeys(inputArray, oldInputArray, predictions)
         print('loop took {} seconds'.format(time.time()-last_time))
         last_time = time.time()
         
     print("done")
+
+def updateKeys(inputArray, oldInputArray, predictions):
+
+    for index, value in np.ndenumerate(predictions):
+        print(value)
+        if (value > 0.95):
+            inputArray[index] = 1
+        else:
+            inputArray[index] = 0
+
+    for index, value in np.ndenumerate(inputArray):
+        if (value != oldInputArray[index]):
+            #release or press corresponding key
+            if (value == 1):
+                smashMeleeInputs.pressKey(index)
+            elif (value == 0):
+                smashMeleeInputs.releaseKey(index)
+    oldInputArray = inputArray
 
 def main():
     print("starting")
