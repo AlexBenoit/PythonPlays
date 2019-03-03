@@ -84,6 +84,7 @@ class TextAnalyzer:
 
     def predict(self, img):
         test_cells_smash = []
+        
         d = img.flatten()
         test_cells_smash.append(d)
         test_cells_smash = np.array(test_cells_smash,dtype=np.float32)
