@@ -13,14 +13,17 @@ from textAnalyzer import TextAnalyzer
 import tensorflowNN
 import smashMeleeInputs
 import tensorflow as tf
-from windowPositioning import openWindow, positionWindow
+import windowPositioning
 
 
-WINDOW_X = 7                                # Default image position for a window perfectly in top left corner
-WINDOW_Y = 55                               # Default image position for a window perfectly in top left corner
-WINDOW_WIDTH = 1247                         # Modify these values for a window snapped in top left corner
-WINDOW_HEIGHT = 700  
-
+WINDOW_X = 0                                # Default image position for a window perfectly in top left corner
+WINDOW_Y = 0                               # Default image position for a window perfectly in top left corner
+WINDOW_WIDTH = 1280                         # Modify these values for a window snapped in top left corner
+WINDOW_HEIGHT = 720  
+BORDER_LEFT = 1
+BORDER_RIGHT = 1
+BORDER_TOP = 38
+BORDER_BOTTOM = 1
 DIGIT_WIDTH = 45
 DIGIT_HEIGHT = 55
 
@@ -46,7 +49,7 @@ def start_playing():
 
         # windowed mode
         oldScreen = screen
-        screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
+        screen =  grabScreen.grab_screen_RGB(region=(WINDOW_X + BORDER_LEFT, WINDOW_Y + BORDER_TOP, WINDOW_WIDTH, WINDOW_HEIGHT))
         print(screen.shape)
         # Image processing goes here if needed
         crop_img6 = screen[550:550+DIGIT_HEIGHT, 528:528+DIGIT_WIDTH]
@@ -100,12 +103,12 @@ def start_playing():
         
        
 
-        #cv2.imshow("window", screen) # Window showing what is captured
-        #cv2.waitKey(1)
+        cv2.imshow("window", screen) # Window showing what is captured
+        cv2.waitKey(1)
 
         # Decision making goes here
-        predictions = decisionModel.predict(np.array([screen]))[0]
-        updateKeys(inputArray, oldInputArray, predictions)
+        #predictions = decisionModel.predict(np.array([screen]))[0]
+        #updateKeys(inputArray, oldInputArray, predictions)
         print('loop took {} seconds'.format(time.time()-last_time))
         last_time = time.time()
         
@@ -136,8 +139,8 @@ def main():
         time.sleep(1)
 
 
-    openWindow()
-    positionWindow()
+    window = windowPositioning.openWindow("Smash Melee")
+    window.positionWindow(0, 0, WINDOW_WIDTH + BORDER_LEFT + BORDER_RIGHT, WINDOW_HEIGHT + BORDER_TOP + BORDER_BOTTOM)
     start_playing()
 
 if __name__ == '__main__':

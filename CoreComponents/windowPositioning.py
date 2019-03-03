@@ -4,26 +4,21 @@ import subprocess
 import os
 import ctypes
 
+class Window:
+    def __init__(self, windowHandle):
+        self.windowHandle = windowHandle
+    
+    def positionWindow(self, x, y, width, height):
+        win32gui.SetWindowPos(self.windowHandle, 0, x - 8, y, width + 16, height + 8, 0x0040) #-7 = invisible border dans windows 10
 
-
-
-def positionWindow():#(handle, x, y, width, height):
-    windowHandle = win32gui.FindWindow(None, 'Dolphin')
+def openWindow(window): 
+    pwd = os.getcwd()
     awareness = ctypes.c_int()
-
     errorCode = ctypes.windll.shcore.GetProcessDpiAwareness(0, ctypes.byref(awareness))
-    print('---------------------')
-    print(awareness.value)
-    print('---------------------')
     errorCode = ctypes.windll.shcore.SetProcessDpiAwareness(2)
 
-
-    win32gui.MoveWindow(windowHandle, -7, 0, 1280, 720, 1) #-7 = invisible border dans windows 10
-
-def openWindow(): 
-
-    pwd = os.getcwd()
-    
-    print(pwd)
-    subprocess.Popen([pwd +'\..\Dolphin\Dolphin.exe', '-b', '-e=' + pwd + '\..\Dolphin\ISOs\Super Smash Bros. Melee (USA).iso']) #Hard coded path
-    time.sleep(2) #laisse le temps a l'emulateur de launch
+    if(window == "Smash Melee"):
+        dolphin = subprocess.Popen([pwd +'\..\Dolphin\Dolphin.exe', '-b', '-e=' + pwd + '\..\Dolphin\ISOs\Super Smash Bros. Melee (USA).iso']) #Hard coded path
+        time.sleep(2) #laisse le temps a l'emulateur de launch
+        print(dolphin.pid)
+        return Window(win32gui.FindWindow(None, 'Dolphin'))
