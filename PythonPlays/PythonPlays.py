@@ -49,7 +49,7 @@ def start_playing():
 
         # windowed mode
         oldScreen = screen
-        screen =  grabScreen.grab_screen_RGB(region=(WINDOW_X + BORDER_LEFT, WINDOW_Y + BORDER_TOP, WINDOW_WIDTH, WINDOW_HEIGHT))
+        screen =  grabScreen.grab_screen_RGB(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
         print(screen.shape)
         # Image processing goes here if needed
         crop_img6 = screen[550:550+DIGIT_HEIGHT, 528:528+DIGIT_WIDTH]
@@ -140,7 +140,7 @@ def main():
 
 
     window = windowPositioning.openWindow("Smash Melee")
-    window.positionWindow(0, 0, WINDOW_WIDTH + BORDER_LEFT + BORDER_RIGHT, WINDOW_HEIGHT + BORDER_TOP + BORDER_BOTTOM)
+    window.positionWindow(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
     start_playing()
 
 if __name__ == '__main__':
