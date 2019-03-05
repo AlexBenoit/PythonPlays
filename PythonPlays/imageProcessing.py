@@ -4,7 +4,6 @@ from numpy import ones,vstack
 from numpy.linalg import lstsq
 from statistics import mean
 
-WINDOW_HEIGHT = 600
 VERTICES = np.array([[10, 500], [10,300], [300,200], [500,200], [800,300], [800,500]], np.int32)
 
 def process_img(image):
