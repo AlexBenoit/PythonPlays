@@ -10,6 +10,7 @@ import numpy
 import imageProcessing as imgProc
 import grabScreen
 from textAnalyzer import TextAnalyzer
+from FrameComparator import FrameComparator
 import tensorflowNN
 import smashMeleeInputs
 import tensorflow as tf
@@ -31,10 +32,10 @@ def start_playing():
     oldInputArray = inputArray
     #load the digit recognition learning
     digitAnalzer = TextAnalyzer()
+    frameComparator = FrameComparator()
     
 
     decisionModel = tensorflowNN.create_model((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X), len(inputArray))
-    i = 1
     screen = None
     last_time = time.time()
 
@@ -56,7 +57,10 @@ def start_playing():
         # predict a number for the 6 images
         predictions = digitAnalzer.predict(numberImages)
 
+        score = frameComparator.compareWithLastFrame(screen,predictions)
+
         #add labels/annotations to the screen image for debugging purpose
+        imA.addScoreToImage(screen, score)
         imA.addLabelsToImage(screen,predictions)
 
 
