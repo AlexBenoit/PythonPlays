@@ -264,3 +264,4 @@ __pycache__/
 PythonPlaysEnv/
 CoreComponentsEnv/
 PlayRecorderEnv/
+SupervisedTrainerEnv/
