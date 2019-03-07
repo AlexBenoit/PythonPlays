@@ -101,6 +101,22 @@ class DQNSolver:
         self.exploration_rate *= EXPLORATION_DECAY
         self.exploration_rate = max(EXPLORATION_MIN, self.exploration_rate)
 
+    def fit(self, input_data, output_data):
+        print("Fitting model")
+        self.model.fit(input_data, output_data)
+
+    def save_weights(self, path):
+        self.model.save_weights(path)
+
+    def save_model(self, path):
+        self.model.save(path)
+
+    def load_weights(self, path):
+        self.model.load_weights(path)
+
+    def load_model(self, path):
+        self.model.load_model(path)
+
 if __name__ == "__main__":
 
     env = gym.make("CartPole-v1")
