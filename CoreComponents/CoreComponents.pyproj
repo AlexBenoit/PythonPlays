@@ -43,9 +43,6 @@
     <Compile Include="Tests\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="textAnalyser.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="windowPositioning.py">
       <SubType>Code</SubType>
     </Compile>
