@@ -8,5 +8,5 @@ BORDER_RIGHT = 1
 BORDER_TOP = 38
 BORDER_BOTTOM = 1
 
-MODEL_PATH = "./models/model.h5"
-MODEL_WEIGHTS_PATH = "./models/model_weights"
+MODEL_PATH = "../models/model.h5"
+MODEL_WEIGHTS_PATH = "../model_weights/model_weights"
