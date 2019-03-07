@@ -1,30 +1,26 @@
 #!/usr/bin/python
 
+#External imports
 import numpy as np
 import cv2
 import time
 import random
 import keyboard
+import tensorflow as tf
+
+#Internal imports
 import keyInputs
-import numpy
 import imageProcessing as imgProc
 import grabScreen
-from textAnalyzer import TextAnalyzer
-from tensorflowNN import DQNSolver
 import smashMeleeInputs
-import tensorflow as tf
 import windowPositioning
 import ImageAnnotator as imA
-import qLearning
 
-WINDOW_X = 0                                # Default image position for a window perfectly in top left corner
-WINDOW_Y = 0                               # Default image position for a window perfectly in top left corner
-WINDOW_WIDTH = 1280                         # Modify these values for a window snapped in top left corner
-WINDOW_HEIGHT = 720  
-BORDER_LEFT = 1
-BORDER_RIGHT = 1
-BORDER_TOP = 38
-BORDER_BOTTOM = 1
+#Specific imports
+from textAnalyzer import TextAnalyzer
+from tensorflowNN import DQNSolver
+from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, \
+BORDER_LEFT, BORDER_RIGHT, BORDER_TOP, BORDER_BOTTOM
 
 def start_playing():
     #Create initial variables 
