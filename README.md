@@ -3,9 +3,10 @@ Python AI that plays Super Smash Bros. Melee
 
 ## Setup
 
-1. Start by cloning the project
-2. Create all [virtual environments](#createVirtualEnvs)
-3. The project is ready to be executed
+1. Install Python 3.7 (64-bit)
+2. Clone the solution containing all the projects
+3. [Create all virtual environments](#createVirtualEnvs) for each project
+4. The project is ready to be executed
 
 ## Execution
 
@@ -38,7 +39,7 @@ training for the [PythonPlays](#PythonPlays) model.
 
 ## <a name="createVirtualEnvs"></a>Virtual Environments
 
-1. Make sure you have a default installation of Python installed and its packages are updated
+1. Make sure you have Python 3.7 (64-bit) installed and its default packages are updated
 2. Right click **Python Environments** in your project
 3. Select **Add Virtual Environment...**
 4. Name the environment the same as the project name and add **Env** at the end. (Ex: CoreComponentsEnv)

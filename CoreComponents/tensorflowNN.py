@@ -22,21 +22,6 @@ EXPLORATION_DECAY = 0.995
 
 LAYER1_NB_NEURONS = 128
 
-def create_model(input_dimension, output_length):
-    width, height = input_dimension
-
-    model = tf.keras.Sequential([
-        tf.keras.layers.Flatten(input_shape=(width, height)),
-        tf.keras.layers.Dense(LAYER1_NB_NEURONS, activation=tf.nn.relu),
-        tf.keras.layers.Dense(output_length, activation=tf.nn.sigmoid)
-    ])
-
-    model.compile(optimizer='adam',
-                  loss='binary_crossentropy',
-                  metrics=['accuracy'])
-
-    return model
-
 class DQNSolver:
 
     def __init__(self, input_dimension):
@@ -143,42 +128,3 @@ if __name__ == "__main__":
                 print("Run:", str(run), ", exploration:", str(dqn_solver.exploration_rate), ", score:", str(step))
                 break 
             dqn_solver.experience_replay()
-
-
-    ##Initialize table with all zeros
-    #QTable = np.zeros([env.observation_space.n, env.action_space.n])
-
-    ##Set learning parameters
-    #lr = 0.8
-    #y = 0.95
-    #num_episodes = 2000
-
-    ##create lists to contain total rewards and steps per episode
-    #rList = []
-    #for i in range(num_episodes):
-    #    #Reset environment and get first new observation
-    #    state = env.reset()
-    #    rAll = 0
-    #    d = False
-    #    j = 0
-
-    #    #The Q-Table learning algorithm
-    #    while j < 99:
-    #        j += 1
-    #        #Choose an action by greedily (with noise) picking from Q-Table
-    #        action = np.argmax(QTable[state,:] + np.random.randn(1, env.action_space.n) * (1./(i + 1)))
-    #        #Get new state and reward from environment
-    #        state1, reward, d, _ = env.step(action)
-
-    #        #Update Q-Table with new knowledge
-    #        QTable[state,action] = QTable[state, action] + lr * (reward + y * np.max(QTable[state1, :]) - QTable[state, action])
-    #        rAll += reward
-    #        state = state1
-        
-    #        if d == True:
-    #            break
-
-    #    rList.append(rAll)
-
-    #print("Score over time:", str(sum(rList)/num_episodes))
-    #print("Final Q-Table values:\n", QTable)

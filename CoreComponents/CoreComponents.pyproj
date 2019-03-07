@@ -28,6 +28,7 @@
     <Compile Include="ImageAnnotator.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tensorflowNN.py" />
     <Compile Include="textAnalyzer.py">
       <SubType>Code</SubType>
     </Compile>
@@ -59,7 +60,6 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\185.PNG" />
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>

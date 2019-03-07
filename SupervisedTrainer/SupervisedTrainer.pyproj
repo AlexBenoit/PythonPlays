@@ -25,6 +25,13 @@
     <Compile Include="SupervisedTrainer.py" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CoreComponents\CoreComponents.pyproj">
+      <Name>CoreComponents</Name>
+      <Project>{792c0e65-c099-4e9c-9328-3ca665f27e36}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Interpreter Include="SupervisedTrainerEnv\">
       <Id>SupervisedTrainerEnv</Id>
       <Version>3.7</Version>
@@ -34,6 +41,10 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="constraints.txt" />
+    <Content Include="requirements.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
