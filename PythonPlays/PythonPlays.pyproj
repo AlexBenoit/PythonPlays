@@ -28,6 +28,9 @@
     <Compile Include="keyInputs.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="qLearning.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="textAnalyse.py">
       <SubType>Code</SubType>
     </Compile>

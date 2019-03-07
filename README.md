@@ -20,16 +20,21 @@ Python AI that plays Super Smash Bros. Melee
 ## Project Descriptions
 
 ### <a name="CoreComponents"></a>CoreComponents
-This project contains the modules common to both the [PythonPlays](#PythonPlays) and 
-[PlayRecorder](#PlayRecorder) projects.
+This project contains the modules common to all the projects present in the solution.
 
 ### <a name="PythonPlays"></a>PythonPlays
 This project is the main project. It contains the code that will play the game. It uses modules
 from the [CoreComponents](#CoreComponents) project.
 
 ### <a name="PlayRecorder"></a>PlayRecorder
-This project is used to recorde a playing session from a user. The data from the recorded session
-is used to do an initial supervised training on the [PythonPlays](#PythonPlays) project.
+This project is used to record a playing session from a user. For every screen capture made, there is an
+array containing the inputs that were currently being pressed. The data from the recorded session
+is used to do an initial supervised training for the [PythonPlays](#PythonPlays) project. The supervised
+training will be done by the [SupervisedTrainer](#SupervisedTrainer) project.
+
+### <a name="PlayRecorder"></a>SupervisedTrainer
+This project will fetch the data recorded by [PlayRecorder](#PlayRecorder) and use it to do an initial
+training for the [PythonPlays](#PythonPlays) model.
 
 ## <a name="createVirtualEnvs"></a>Virtual Environments
 
