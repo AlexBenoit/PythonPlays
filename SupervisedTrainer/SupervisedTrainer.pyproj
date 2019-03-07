@@ -2,16 +2,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>792c0e65-c099-4e9c-9328-3ca665f27e36</ProjectGuid>
+    <ProjectGuid>31d44f3f-75ab-4360-a9f5-aab6618f0d55</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>CoreComponents.py</StartupFile>
+    <StartupFile>SupervisedTrainer.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>CoreComponents</Name>
-    <RootNamespace>CoreComponents</RootNamespace>
-    <InterpreterId>MSBuild|CoreComponentsEnv|$(MSBuildProjectFullPath)</InterpreterId>
+    <Name>SupervisedTrainer</Name>
+    <RootNamespace>SupervisedTrainer</RootNamespace>
+    <InterpreterId>MSBuild|SupervisedTrainerEnv|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,37 +22,20 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CoreComponents.py" />
-    <Compile Include="generateClassifier.py" />
-    <Compile Include="grabScreen.py" />
-    <Compile Include="ImageAnnotator.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="tensorflowNN.py" />
-    <Compile Include="textAnalyzer.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Tests\test_grabScreen.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Tests\__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="textAnalyser.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="windowPositioning.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="__init__.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="SupervisedTrainer.py" />
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="CoreComponentsEnv\">
-      <Id>CoreComponentsEnv</Id>
+    <ProjectReference Include="..\CoreComponents\CoreComponents.pyproj">
+      <Name>CoreComponents</Name>
+      <Project>{792c0e65-c099-4e9c-9328-3ca665f27e36}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="SupervisedTrainerEnv\">
+      <Id>SupervisedTrainerEnv</Id>
       <Version>3.7</Version>
-      <Description>CoreComponentsEnv (Python 3.7 (64-bit))</Description>
+      <Description>SupervisedTrainerEnv (Python 3.7 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
@@ -60,10 +43,8 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="constraints.txt" />
     <Content Include="requirements.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tests\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -28,14 +28,14 @@
     <Compile Include="keyInputs.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="qLearning.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="textAnalyse.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="pythonPlays.py" />
     <Compile Include="smashMeleeInputs.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="tensorflowNN.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tests\test_model.py">
@@ -53,17 +53,6 @@
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="PythonPlaysEnv\">
-      <Id>PythonPlaysEnv</Id>
-      <Version>3.6</Version>
-      <Description>PythonPlaysEnv (Python 3.6 (64-bit))</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CoreComponents\CoreComponents.pyproj">
       <Name>CoreComponents</Name>
       <Project>{792c0e65-c099-4e9c-9328-3ca665f27e36}</Project>
@@ -72,6 +61,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Interpreter Include="PythonPlaysEnv\">
+      <Id>PythonPlaysEnv</Id>
+      <Version>3.7</Version>
+      <Description>PythonPlaysEnv (Python 3.7 (64-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X64</Architecture>
+    </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
