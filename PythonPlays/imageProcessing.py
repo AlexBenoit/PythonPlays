@@ -4,8 +4,37 @@ from numpy import ones,vstack
 from numpy.linalg import lstsq
 from statistics import mean
 
-WINDOW_HEIGHT = 600
 VERTICES = np.array([[10, 500], [10,300], [300,200], [500,200], [800,300], [800,500]], np.int32)
+
+
+DIGIT_WIDTH = 45
+DIGIT_HEIGHT = 55
+
+def processNumber(image):
+     crop_img6 = image[610:610+DIGIT_HEIGHT, 541:541+DIGIT_WIDTH]
+     crop_img5 = image[610:610+DIGIT_HEIGHT, 496:496+DIGIT_WIDTH]
+     crop_img4 = image[610:610+DIGIT_HEIGHT, 451:451+DIGIT_WIDTH]
+     crop_img3 = image[610:610+DIGIT_HEIGHT, 333:333+DIGIT_WIDTH]
+     crop_img2 = image[610:610+DIGIT_HEIGHT, 288:288+DIGIT_WIDTH]
+     crop_img1 = image[610:610+DIGIT_HEIGHT, 243:243+DIGIT_WIDTH]
+
+     crop_img1[np.where((crop_img1 >= 5))] = 255
+     crop_img6[np.where((crop_img6 >= 5))] = 255
+     crop_img5[np.where((crop_img5 >= 5))] = 255
+     crop_img4[np.where((crop_img4 >= 5))] = 255
+     crop_img3[np.where((crop_img3 >= 5))] = 255
+     crop_img2[np.where((crop_img2 >= 5))] = 255
+
+     list = []
+
+     list.append(crop_img1)
+     list.append(crop_img2)
+     list.append(crop_img3)
+     list.append(crop_img4)
+     list.append(crop_img5)
+     list.append(crop_img6)
+
+     return list
 
 def process_img(image):
     original_image = image

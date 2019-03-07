@@ -23,11 +23,27 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CoreComponents.py" />
+    <Compile Include="generateClassifier.py" />
+    <Compile Include="globalConstants.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="grabScreen.py" />
+    <Compile Include="ImageAnnotator.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="keyInputs.py" />
+    <Compile Include="smashMeleeInputs.py" />
+    <Compile Include="tensorflowNN.py" />
+    <Compile Include="textAnalyzer.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tests\test_grabScreen.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tests\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="textAnalyser.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="windowPositioning.py">

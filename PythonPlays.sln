@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "SupervisedTrainer", "SupervisedTrainer\SupervisedTrainer.pyproj", "{31D44F3F-75AB-4360-A9F5-AAB6618F0D55}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,8 @@ Global
 		{25033419-B42E-4F9E-A68A-48F8CB53C495}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{792C0E65-C099-4E9C-9328-3CA665F27E36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{792C0E65-C099-4E9C-9328-3CA665F27E36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31D44F3F-75AB-4360-A9F5-AAB6618F0D55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31D44F3F-75AB-4360-A9F5-AAB6618F0D55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
