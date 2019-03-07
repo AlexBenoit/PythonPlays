@@ -25,7 +25,6 @@ BORDER_LEFT, BORDER_RIGHT, BORDER_TOP, BORDER_BOTTOM
 def start_playing():
     #Create initial variables 
     screen = grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
-    oldScreen = screen
     dqn_solver = DQNSolver((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X))
     
     #load the digit recognition learning
