@@ -19,4 +19,4 @@ dqn_solver = DQNSolver((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X))
 
 dqn_solver.fit(np.array([screen_data]), np.array([input_data]))
 dqn_solver.save_weights(MODEL_WEIGHTS_PATH)
-#dqn_solver.save_model(MODEL_PATH)
+dqn_solver.save_model(MODEL_PATH)
