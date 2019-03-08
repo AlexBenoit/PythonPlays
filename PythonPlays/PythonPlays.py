@@ -19,8 +19,7 @@ import ImageAnnotator as imA
 #Specific imports
 from textAnalyzer import TextAnalyzer
 from tensorflowNN import DQNSolver
-from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, \
-BORDER_LEFT, BORDER_RIGHT, BORDER_TOP, BORDER_BOTTOM
+from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT
 
 def start_playing():
     #Create initial variables 
