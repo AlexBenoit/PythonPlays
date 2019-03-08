@@ -25,7 +25,7 @@ LAYER1_NB_NEURONS = 128
 class DQNSolver:
 
     def __init__(self, input_dimension):
-        self.inputArray = np.zeros(smashMeleeInputs.getSmashMeleeInputs())
+        self.inputArray = np.zeros(len(smashMeleeInputs.getSmashMeleeInputs()))
         self.oldInputArray = self.inputArray
 
         self.exploration_rate = EXPLORATION_MAX
