@@ -12,9 +12,11 @@ import tensorflow as tf
 import keyInputs
 import imageProcessing as imgProc
 import grabScreen
+from FrameComparator import FrameComparator
+import tensorflowNN
 import smashMeleeInputs
 import windowPositioning
-import ImageAnnotator as imA
+
 
 #Specific imports
 from textAnalyzer import TextAnalyzer
@@ -25,11 +27,11 @@ BORDER_LEFT, BORDER_RIGHT, BORDER_TOP, BORDER_BOTTOM
 def start_playing():
     #Create initial variables 
     screen = grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
-    oldScreen = screen
     dqn_solver = DQNSolver((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X))
     
     #load the digit recognition learning
-    digitAnalzer = TextAnalyzer()
+ 
+    frameComparator = FrameComparator()
     
     last_time = time.time()
 
@@ -45,18 +47,12 @@ def start_playing():
         dqn_solver.take_action(action)
         oldScreen = screen
         screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
-        #reward = compareFrames(screen, oldScreen)
+        reward = frameComparator.compareWithLastFrame(screen)
         #dqn_solver.remember(oldScreen, action, reward, screen)
         #dqn_solver.experience_replay()
 
-        # takes the screen above and identifies the zone of the numbers into 6 images
-        #numberImages = imgProc.processNumber(screen)
+        
 
-        # predict a number for the 6 images
-        #predictions = digitAnalzer.predict(numberImages)
-
-        #add labels/annotations to the screen image for debugging purpose
-        #imA.addLabelsToImage(screen,predictions)
 
 
 
