@@ -11,7 +11,8 @@
     <OutputPath>.</OutputPath>
     <Name>CoreComponents</Name>
     <RootNamespace>CoreComponents</RootNamespace>
-    <InterpreterId>MSBuild|CoreComponentsEnv|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>
+    </InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,17 +50,6 @@
     <Compile Include="__init__.py">
       <SubType>Code</SubType>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Interpreter Include="CoreComponentsEnv\">
-      <Id>CoreComponentsEnv</Id>
-      <Version>3.7</Version>
-      <Description>CoreComponentsEnv (Python 3.7 (64-bit))</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
