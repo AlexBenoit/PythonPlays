@@ -4,10 +4,7 @@
 import time
 import cv2
 import keyboard
-import keyInputs
 import numpy as np
-import csv
-
 
 #Internal imports
 import grabScreen
@@ -18,14 +15,13 @@ from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT
 
 input_array = np.zeros(len(smashMeleeInputs.getSmashMeleeInputs()))
 
-recording = False
-
 def on_press_callback(event):
-   if(event.name in keyInputs.inputDist):
-       if (input_array[keyInputs.inputDist[event.name][0]] == 0):
-           input_array[keyInputs.inputDist[event.name][0]] = 1
-       else : 
-           input_array[keyInputs.inputDist[event.name][0]] = 0
+    print("pressed key")
+    print(event.name)
+
+def on_release_callback(event):
+    print("released key")
+    print(event.name)
 
 def start_recording():
     ready_to_record = False
@@ -34,20 +30,16 @@ def start_recording():
         if keyboard.is_pressed("r"):
             ready_to_record = True
 
-    keyboard.hook(on_press_callback)
-    recording = True
-    f = open('data.csv', 'w')
+    keyboard.on_press(on_press_callback)
 
-    while recording == True:
-        if  keyboard.is_pressed("esc"):
-           recording = False
+    while True:
+        if keyboard.is_pressed("q"):
+            break
+
         screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
-        f.write(str(screen))
-        f.write('\n')
-        print(recording)
-    keyboard.unhook_all()
-    f.close()
-    
+
+        #cv2.imshow("window", screen) # Window showing what is captured
+        #cv2.waitKey(1)
 
 def main():
     print("starting")
@@ -57,8 +49,6 @@ def main():
 
     #window = windowPositioning.openWindow("Smash Melee")
     #window.positionWindow(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
-
-    np.set_printoptions(threshold=np.inf)
 
     start_recording()
 

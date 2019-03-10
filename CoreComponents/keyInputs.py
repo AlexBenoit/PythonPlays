@@ -53,25 +53,6 @@ ARROW_DOWN = 0xD0
 #LMB =
 #RMB =
 #MMB =
-#MMB =
-
-inputDist = {
-    "x" : [0,X],
-    "z" : [1,Z], 
-    "c" : [2,C], 
-    "s" : [3,S], 
-    "d" : [4,D], 
-    "up" : [5,ARROW_UP], 
-    "down" : [6,ARROW_DOWN], 
-    "left" : [7,ARROW_LEFT], 
-    "right" : [8,ARROW_RIGHT], 
-    "i" : [9,I],   
-    "k" : [10,K],     
-    "j" : [11,J],     
-    "l" : [12,L],      
-    "q" : [13,Q], 
-    "w" : [14,W]
-}
 
 # C struct redefinitions 
 PUL = ctypes.POINTER(ctypes.c_ulong)
