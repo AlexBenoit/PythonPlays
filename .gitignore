@@ -261,7 +261,7 @@ __pycache__/
 *.pyc
 
 # Python virtual environment
-PythonPlaysEnv/
-CoreComponentsEnv/
-PlayRecorderEnv/
-SupervisedTrainerEnv/
+PythonPlays/en/
+CoreComponents/env/
+PlayRecorder/env/
+SupervisedTrainer/en/
