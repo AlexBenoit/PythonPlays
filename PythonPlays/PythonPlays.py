@@ -21,6 +21,8 @@ from textAnalyzer import TextAnalyzer
 from tensorflowNN import DQNSolver
 from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT
 
+
+
 def start_playing():
     #Create initial variables 
     screen = grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
@@ -32,7 +34,7 @@ def start_playing():
     last_time = time.time()
 
     while True:
-        if keyboard.is_pressed("q"):
+        if keyboard.is_pressed("p"):
             #TODO: add dolphin termination
             cv2.destroyAllWindows()
             dqn_solver.releaseAllKeys()
@@ -41,7 +43,7 @@ def start_playing():
         #Main decision making logic
         action = dqn_solver.get_action(screen)
         dqn_solver.take_action(action)
-        oldScreen = screen
+        oldScreen = screen.copy()
         screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
         #reward = compareFrames(screen, oldScreen)
         #dqn_solver.remember(oldScreen, action, reward, screen)
@@ -58,8 +60,8 @@ def start_playing():
 
 
 
-        cv2.imshow("window", screen) # Window showing what is captured
-        cv2.waitKey(1)
+        #cv2.imshow("window", screen) # Window showing what is captured
+        #cv2.waitKey(1)
         
         print('loop took {} seconds'.format(time.time()-last_time))
         last_time = time.time()

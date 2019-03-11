@@ -26,7 +26,7 @@ class DQNSolver:
 
     def __init__(self, input_dimension):
         self.inputArray = np.zeros(len(smashMeleeInputs.getSmashMeleeInputs()))
-        self.oldInputArray = self.inputArray
+        self.oldInputArray = self.inputArray.copy()
 
         self.exploration_rate = EXPLORATION_MAX
 
@@ -65,24 +65,25 @@ class DQNSolver:
 
     def take_action(self, action):
 
-        for index, input_value in np.ndenumerate(action):
-            if (input_value > 0.95):
+        for index, action_input_value in np.ndenumerate(action):
+            if (action_input_value > 0.95):
                 self.inputArray[index] = 1
             else:
                 self.inputArray[index] = 0
-        print(self.inputArray)
-        for index, old_input_value in np.ndenumerate(self.inputArray):
-            if (old_input_value != self.oldInputArray[index]):
+        #print(self.inputArray)
+        for index, input_value in np.ndenumerate(self.inputArray):
+            if (input_value != self.oldInputArray[index[0]]):
                 #release or press corresponding key
-                if (old_input_value == 1):
-                    smashMeleeInputs.pressKey(index)
-                elif (old_input_value == 0):
-                    smashMeleeInputs.releaseKey(index)
+                if (input_value == 1):
+                    smashMeleeInputs.pressKey(index[0])
+                elif (input_value == 0):
+                    smashMeleeInputs.releaseKey(index[0])
         self.oldInputArray = self.inputArray
 
-    def releaseAllKeys():
+    def releaseAllKeys(self):
         for index in range(len(self.inputArray)):
-            smashMeleeInputs.releaseKey(index)
+            if(self.inputArray[index] == 1):
+                smashMeleeInputs.releaseKey(index)
 
     def experience_replay(self):
         terminal = False #DO NOT DELETE!! Needed to keep general structure 
