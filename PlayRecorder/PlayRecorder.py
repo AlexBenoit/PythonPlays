@@ -30,11 +30,12 @@ def on_press_callback(event):
 def start_recording():
     ready_to_record = False
 
+    keyboard.hook(on_press_callback)
+
     while not ready_to_record:
         if keyboard.is_pressed("r"):
             ready_to_record = True
 
-    keyboard.hook(on_press_callback)
     recording = True
     f = open('data.csv', 'w')
 

@@ -23,7 +23,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CoreComponents.py" />
-    <Compile Include="generateClassifier.py" />
     <Compile Include="globalConstants.py">
       <SubType>Code</SubType>
     </Compile>

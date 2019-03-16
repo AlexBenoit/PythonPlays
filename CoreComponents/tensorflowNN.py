@@ -88,17 +88,21 @@ class DQNSolver:
     def experience_replay(self):
         terminal = False #DO NOT DELETE!! Needed to keep general structure 
 
-        #if len(self.memory) < BATCH_SIZE:
-        #    return
+        if len(self.memory) < BATCH_SIZE:
+            return
+
+        def updateQValue(value):
+            return reward + GAMMA * value
 
         batch = random.sample(self.memory, BATCH_SIZE)
         for oldScreen, action, reward, screen in batch:
-            q_update = reward
+            q_update = self.model.predict(np.array([screen]))[0]
             if not terminal:
-                q_update = (reward + GAMMA * np.amax(self.model.predict(state_next)[0]))
-            q_values = self.model.predict(state)
-            q_values[0][action] = q_update
-            self.model.fit(state, q_values, verbose=0)
+                #q_update = (reward + GAMMA * np.amax(self.model.predict(np.array([screen]))[0]))
+                q_update = np.apply_along_axis(updateQValue, 0, self.model.predict(np.array([screen]))[0])
+            #q_values = self.model.predict(state)
+            #q_values[0][action] = q_update
+            self.model.fit(np.array([oldScreen]), np.array([q_update]), verbose=0)
         self.exploration_rate *= EXPLORATION_DECAY
         self.exploration_rate = max(EXPLORATION_MIN, self.exploration_rate)
 

@@ -46,19 +46,9 @@ def start_playing():
         oldScreen = screen.copy()
         screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
         #reward = compareFrames(screen, oldScreen)
-        #dqn_solver.remember(oldScreen, action, reward, screen)
-        #dqn_solver.experience_replay()
-
-        # takes the screen above and identifies the zone of the numbers into 6 images
-        #numberImages = imgProc.processNumber(screen)
-
-        # predict a number for the 6 images
-        #predictions = digitAnalzer.predict(numberImages)
-
-        #add labels/annotations to the screen image for debugging purpose
-        #imA.addLabelsToImage(screen,predictions)
-
-
+        reward = 1
+        dqn_solver.remember(oldScreen, action, reward, screen)
+        dqn_solver.experience_replay()
 
         #cv2.imshow("window", screen) # Window showing what is captured
         #cv2.waitKey(1)
