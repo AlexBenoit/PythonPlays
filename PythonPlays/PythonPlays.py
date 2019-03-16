@@ -15,6 +15,7 @@ import grabScreen
 import smashMeleeInputs
 import windowPositioning
 import ImageAnnotator as imA
+from gameStartAnalyzer import GameStartAnalyzer
 
 #Specific imports
 from textAnalyzer import TextAnalyzer
@@ -30,6 +31,20 @@ def start_playing():
     
     #load the digit recognition learning
     digitAnalzer = TextAnalyzer()
+    gameStartAnalyzer = GameStartAnalyzer()
+
+    # loop until game start
+    while True:
+        screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
+        cropped = screen[130:490, 320:960]
+        cropped[np.where((cropped >= 5))] = 255
+        cropped = cv2.resize(cropped,(64,36))
+        prediction = gameStartAnalyzer.predict(cropped)
+
+        if prediction == 1:
+            print('GAME STARTED')
+            break
+
     
     last_time = time.time()
 
@@ -78,11 +93,6 @@ def main():
     window = windowPositioning.openWindow("Smash Melee")
     window.positionWindow(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
 
-    print("Go in the game")
-    timeLeft = 45
-    for i in range(timeLeft):
-        print(timeLeft - i)
-        time.sleep(1)
 
     start_playing()
 
