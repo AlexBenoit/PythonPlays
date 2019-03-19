@@ -12,6 +12,8 @@ import tensorflow as tf
 import keyInputs
 import imageProcessing as imgProc
 import grabScreen
+from FrameComparator import FrameComparator
+import tensorflowNN
 import smashMeleeInputs
 import windowPositioning
 import ImageAnnotator as imA
@@ -30,6 +32,7 @@ def start_playing():
     dqn_solver = DQNSolver((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X))
     
     #load the digit recognition learning
+    frameComparator = FrameComparator()
     digitAnalzer = TextAnalyzer()
     gameStartAnalyzer = GameStartAnalyzer()
 
@@ -60,7 +63,7 @@ def start_playing():
         dqn_solver.take_action(action)
         oldScreen = screen.copy()
         screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
-        #reward = compareFrames(screen, oldScreen)
+        reward = frameComparator.compareWithLastFrame(screen)
         reward = 1
         dqn_solver.remember(oldScreen, action, reward, screen)
         dqn_solver.experience_replay()
