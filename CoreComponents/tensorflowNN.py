@@ -25,8 +25,8 @@ LAYER1_NB_NEURONS = 128
 class DQNSolver:
 
     def __init__(self, input_dimension):
-        self.inputArray = np.zeros(smashMeleeInputs.getSmashMeleeInputs())
-        self.oldInputArray = self.inputArray
+        self.inputArray = np.zeros(len(smashMeleeInputs.getSmashMeleeInputs()))
+        self.oldInputArray = self.inputArray.copy()
 
         self.exploration_rate = EXPLORATION_MAX
 
@@ -65,39 +65,44 @@ class DQNSolver:
 
     def take_action(self, action):
 
-        for index, input_value in np.ndenumerate(action):
-            if (input_value > 0.95):
+        for index, action_input_value in np.ndenumerate(action):
+            if (action_input_value > 0.95):
                 self.inputArray[index] = 1
             else:
                 self.inputArray[index] = 0
-        print(self.inputArray)
-        for index, old_input_value in np.ndenumerate(self.inputArray):
-            if (old_input_value != self.oldInputArray[index]):
+        #print(self.inputArray)
+        for index, input_value in np.ndenumerate(self.inputArray):
+            if (input_value != self.oldInputArray[index[0]]):
                 #release or press corresponding key
-                if (old_input_value == 1):
-                    smashMeleeInputs.pressKey(index)
-                elif (old_input_value == 0):
-                    smashMeleeInputs.releaseKey(index)
+                if (input_value == 1):
+                    smashMeleeInputs.pressKey(index[0])
+                elif (input_value == 0):
+                    smashMeleeInputs.releaseKey(index[0])
         self.oldInputArray = self.inputArray
 
-    def releaseAllKeys():
+    def releaseAllKeys(self):
         for index in range(len(self.inputArray)):
-            smashMeleeInputs.releaseKey(index)
+            if(self.inputArray[index] == 1):
+                smashMeleeInputs.releaseKey(index)
 
     def experience_replay(self):
         terminal = False #DO NOT DELETE!! Needed to keep general structure 
 
-        #if len(self.memory) < BATCH_SIZE:
-        #    return
+        if len(self.memory) < BATCH_SIZE:
+            return
+
+        def updateQValue(value):
+            return reward + GAMMA * value
 
         batch = random.sample(self.memory, BATCH_SIZE)
         for oldScreen, action, reward, screen in batch:
-            q_update = reward
+            q_update = self.model.predict(np.array([screen]))[0]
             if not terminal:
-                q_update = (reward + GAMMA * np.amax(self.model.predict(state_next)[0]))
-            q_values = self.model.predict(state)
-            q_values[0][action] = q_update
-            self.model.fit(state, q_values, verbose=0)
+                #q_update = (reward + GAMMA * np.amax(self.model.predict(np.array([screen]))[0]))
+                q_update = np.apply_along_axis(updateQValue, 0, self.model.predict(np.array([screen]))[0])
+            #q_values = self.model.predict(state)
+            #q_values[0][action] = q_update
+            self.model.fit(np.array([oldScreen]), np.array([q_update]), verbose=0)
         self.exploration_rate *= EXPLORATION_DECAY
         self.exploration_rate = max(EXPLORATION_MIN, self.exploration_rate)
 
