@@ -12,7 +12,7 @@ BORDER_RIGHT, BORDER_TOP, BORDER_BOTTOM, MODEL_PATH, MODEL_WEIGHTS_PATH
 
 
 #import data
-screen_data = grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT)) #TODO: update to data from import
+screen_data = grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT)) #TODO: update to data from import           
 input_data = np.zeros(18) #TODO: update to data from import
 
 dqn_solver = DQNSolver((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X))
