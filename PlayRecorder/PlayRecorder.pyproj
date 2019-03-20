@@ -22,11 +22,17 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Recorder.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PlayRecorder.py" />
     <Compile Include="Tests\test_keyboard_capture.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tests\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Writer.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__init__.py">
