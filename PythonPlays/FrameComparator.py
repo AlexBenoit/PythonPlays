@@ -19,6 +19,8 @@ class FrameComparator:
         self.previousReward = None
         self.previousP1Damage = None
         self.previousP2Damage = None
+        self.opponentTransition = False
+        self.myTransition = False
         self.digitAnalzer = TextAnalyzer()
 
     #damagaList contains 6 character, first 3 is ourcharacter, last 3 is ennemy
@@ -37,38 +39,56 @@ class FrameComparator:
             return NEUTRAL
 
         #ignore false read from grabscreen (between numbers transitions)
-        if(damageList[2] == ' ' or damageList[5] == ' '):
-            return NEUTRAL
+        reward = 0
 
-        #concatenated numbers
-        previousAllyHealth = self.previousP1Damage
-        previousOpponentHealth = self.previousP2Damage
+       #transition on my character
+        if(damageList[2] == ' '):
+            if(self.myTransition == True):
+                self.myTransition = False
+                reward = 0
+            else : 
+                self.myTransition = False
+                reward =  -1
+            
 
-        currentAllyHealth = damageList[0]+damageList[1]+damageList[2]
-        currentOpponentHealth = damageList[3]+damageList[4]+damageList[5]
+          #transition on opponent 
+        if(damageList[5] == ' '):
+             if(self.opponentTransition == True):
+                self.opponentTransition = False
+                reward = 0
+             else : 
+                self.opponentTransition = False
+                reward = 1
 
-        currentAllyHealth = currentAllyHealth.replace(' ', '')
-        currentOpponentHealth = currentOpponentHealth.replace(' ', '')
+        ##concatenated numbers
+        #previousAllyHealth = self.previousP1Damage
+        #previousOpponentHealth = self.previousP2Damage
 
-        allyVariation = int(currentAllyHealth) - int(previousAllyHealth)
-        opponentVariation = int(currentOpponentHealth) - int(previousOpponentHealth)
+        #currentAllyHealth = damageList[0]+damageList[1]+damageList[2]
+        #currentOpponentHealth = damageList[3]+damageList[4]+damageList[5]
+
+        #currentAllyHealth = currentAllyHealth.replace(' ', '')
+        #currentOpponentHealth = currentOpponentHealth.replace(' ', '')
+
+        #allyVariation = int(currentAllyHealth) - int(previousAllyHealth)
+        #opponentVariation = int(currentOpponentHealth) - int(previousOpponentHealth)
 
 
-        self.previousFrame = currentFrame
-        self.previousP1Damage = int(currentAllyHealth)
-        self.previousP2Damage = int(currentOpponentHealth)
+        #self.previousFrame = currentFrame
+        #self.previousP1Damage = int(currentAllyHealth)
+        #self.previousP2Damage = int(currentOpponentHealth)
 
-        # current hp is 0 and previous was greater than 0 which means ally died
-        if (int(currentAllyHealth) == 0 and int(previousAllyHealth) > 0):
-            self.previousReward = DIE
-            return DIE
+        ## current hp is 0 and previous was greater than 0 which means ally died
+        #if (int(currentAllyHealth) == 0 and int(previousAllyHealth) > 0):
+        #    self.previousReward = DIE
+        #    return DIE
 
-         # current hp is 0 and previous was greater than 0 which means opponent died
-        if (int(currentOpponentHealth) == 0 and int(previousOpponentHealth) > 0):
-            self.previousReward = KILL_OPPONENT
-            return KILL_OPPONENT
+        # # current hp is 0 and previous was greater than 0 which means opponent died
+        #if (int(currentOpponentHealth) == 0 and int(previousOpponentHealth) > 0):
+        #    self.previousReward = KILL_OPPONENT
+        #    return KILL_OPPONENT
 
-        reward = allyVariation * TAKE_DAMAGE + opponentVariation * INFLICT_DAMAGE
+        #reward = allyVariation * TAKE_DAMAGE + opponentVariation * INFLICT_DAMAGE
 
         self.previousReward = reward
 

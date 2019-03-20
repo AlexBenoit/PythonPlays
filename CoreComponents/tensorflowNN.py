@@ -70,7 +70,7 @@ class DQNSolver:
                 self.inputArray[index] = 1
             else:
                 self.inputArray[index] = 0
-        #print(self.inputArray)
+        print(self.inputArray)
         for index, input_value in np.ndenumerate(self.inputArray):
             if (input_value != self.oldInputArray[index[0]]):
                 #release or press corresponding key
