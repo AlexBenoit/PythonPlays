@@ -13,7 +13,6 @@ import keyInputs
 import imageProcessing as imgProc
 import grabScreen
 from FrameComparator import FrameComparator
-import tensorflowNN
 import smashMeleeInputs
 import windowPositioning
 import ImageAnnotator as imA
@@ -64,7 +63,6 @@ def start_playing():
         oldScreen = screen.copy()
         screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
         reward = frameComparator.compareWithLastFrame(screen)
-        reward = 1
         dqn_solver.remember(oldScreen, action, reward, screen)
         dqn_solver.experience_replay()
 
