@@ -2,6 +2,7 @@
 #External imports
 import numpy as np
 import os, os.path
+import sys
 
 
 #Internal imports
@@ -13,7 +14,7 @@ from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, BOR
 BORDER_RIGHT, BORDER_TOP, BORDER_BOTTOM, MODEL_PATH, MODEL_WEIGHTS_PATH
 
 # Ask start index
-index_string = raw_input("What index should we start training ? ")
+index_string = input("What index should we start training ? ")
 index = int(index_string)
 
 
