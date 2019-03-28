@@ -62,9 +62,9 @@ def start_playing():
         dqn_solver.take_action(action)
         oldScreen = screen.copy()
         screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
-        reward = frameComparator.compareWithLastFrame(screen)
-        dqn_solver.remember(oldScreen, action, reward, screen)
-        dqn_solver.experience_replay()
+        #reward = frameComparator.compareWithLastFrame(screen)
+        #dqn_solver.remember(oldScreen, action, reward, screen)
+        #dqn_solver.experience_replay()
 
         #cv2.imshow("window", screen) # Window showing what is captured
         #cv2.waitKey(1)

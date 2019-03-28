@@ -4,7 +4,6 @@ import numpy as np
 import os, os.path
 import sys
 
-
 #Internal imports
 import grabScreen
 
@@ -13,27 +12,40 @@ from tensorflowNN import DQNSolver
 from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, BORDER_LEFT, \
 BORDER_RIGHT, BORDER_TOP, BORDER_BOTTOM, MODEL_PATH, MODEL_WEIGHTS_PATH
 
-# Ask start index
-index_string = input("What index should we start training ? ")
-index = int(index_string)
+def main():
+    # Ask start index
+    index_string = input("What index should we start training ? ")
+    index = int(index_string)
+
+    files_in_directory = [name for name in os.listdir('./Training Data') if os.path.isfile("./Training Data/" + name)]
+
+    dqn_solver = DQNSolver((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X))
+
+    files_in_directory = files_in_directory[index:]
+
+    for file in files_in_directory:
+        print("Training started for : " + file)
+        data = np.load('./Training Data/' + file)
+        main_array = data.f.arr_0
+        dqn_solver.fit(np.array(array_to_list(main_array[::10,0], 1)), np.array(array_to_list(main_array[::10,1], 1)))
 
 
-files_in_directory = [name for name in os.listdir('./input') if os.path.isfile(name)]
+    dqn_solver.save_weights(MODEL_WEIGHTS_PATH)
+    dqn_solver.save_model(MODEL_PATH)
 
-dqn_solver = DQNSolver((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X))
+def array_to_list(array, level):
+    print("converting to list")
+    if level == 0:
+        return array
 
+    if isinstance(array, np.ndarray):
+        return array_to_list(array.tolist(), level - 1)
+    elif isinstance(array, list):
+        return [array_to_list(item, level - 1) for item in array]
+    elif isinstance(array, tuple):
+        return tuple(array_to_list(item, level - 1) for item in array)
+    else:
+        return array
 
-for index_file in range(0, index):
-    del files_in_directory[index_file]
-
-for file in files_in_directory:
-    print("Training started for : " + file)
-    data = np.load('./input/' + file)
-    for captured_data in data:
-        screen_data = captured_data[0]
-        input_data = captured_data[1]
-        dqn_solver.fit(np.array([screen_data]), np.array([input_data]))
-
-
-dqn_solver.save_weights(MODEL_WEIGHTS_PATH)
-dqn_solver.save_model(MODEL_PATH)
+if __name__ == "__main__":
+    main()
