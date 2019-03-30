@@ -9,8 +9,8 @@ import grabScreen
 
 #Specific imports
 from tensorflowNN import DQNSolver
-from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, BORDER_LEFT, \
-BORDER_RIGHT, BORDER_TOP, BORDER_BOTTOM, MODEL_PATH, MODEL_WEIGHTS_PATH
+from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, \
+MODEL_PATH, MODEL_WEIGHTS_PATH
 
 def main():
     # Ask start index
@@ -48,4 +48,7 @@ def array_to_list(array, level):
         return array
 
 if __name__ == "__main__":
-    main()
+    #main()
+
+    from tensorflow.python.client import device_lib
+    print(device_lib.list_local_devices())
