@@ -8,7 +8,7 @@ import sys
 import grabScreen
 
 #Specific imports
-from tensorflowNN import DQNSolver
+#from tensorflowNN import DQNSolver
 from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, \
 MODEL_PATH, MODEL_WEIGHTS_PATH
 
@@ -51,4 +51,7 @@ if __name__ == "__main__":
     #main()
 
     from tensorflow.python.client import device_lib
+
     print(device_lib.list_local_devices())
+    with tf.device('/cpu:0'):
+        print("using gpu")

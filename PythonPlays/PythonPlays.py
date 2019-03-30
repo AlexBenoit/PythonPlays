@@ -66,8 +66,8 @@ def start_playing():
         #dqn_solver.remember(oldScreen, action, reward, screen)
         #dqn_solver.experience_replay()
 
-        #cv2.imshow("window", screen) # Window showing what is captured
-        #cv2.waitKey(1)
+        cv2.imshow("window", screen) # Window showing what is captured
+        cv2.waitKey(1)
         
         print('loop took {} seconds'.format(time.time()-last_time))
         last_time = time.time()
