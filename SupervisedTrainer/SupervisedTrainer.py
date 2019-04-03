@@ -4,6 +4,8 @@ import tensorflow as tf
 import numpy as np
 import os, os.path
 import sys
+import cv2
+import time
 
 #Internal imports
 import grabScreen
@@ -25,12 +27,21 @@ def main():
     files_in_directory = files_in_directory[index:]
 
     for file in files_in_directory:
+        start = time.time()
         print("Training started for : " + file)
         data = np.load('./Training Data/' + file)
         main_array = data.f.arr_0
-        screens = np.array(array_to_list(main_array[::10,0], 1))
-        inputs = np.array(array_to_list(main_array[::10,1], 1))
-        dqn_solver.fit(screens, inputs)
+        max_res_input_array = np.array(array_to_list(main_array[::10,0], 1))
+        resize_input_array = []
+        for i, screen in enumerate(max_res_input_array):
+            width = int(screen.shape[1] * 50/ 100)
+            height = int(screen.shape[0] * 50/ 100)
+            dim = (width, height)
+            resize_input_array.append(cv2.resize(screen, dim, interpolation=cv2.INTER_LANCZOS4))
+        output_array = np.array(array_to_list(main_array[::10,1], 1))
+        dqn_solver.fit(np.array(resize_input_array), output_array)
+        end = time.time()
+        print("Time for file : " + file + " = " + str(end-start) + " seconds")
 
 
     dqn_solver.save_weights(MODEL_WEIGHTS_PATH)
@@ -51,6 +62,3 @@ def array_to_list(array, level):
 
 if __name__ == "__main__":
     main()
-    screen = np.array([[1,2,3,4,5], [6,7,8,9,10],[11,12,13,14,15]])
-    screens = np.array([screen])
-    print("hello")

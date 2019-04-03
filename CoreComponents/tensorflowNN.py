@@ -108,7 +108,7 @@ class DQNSolver:
 
     def fit(self, input_data, output_data):
         print("Fitting model")
-        self.model.fit(input_data, output_data)
+        self.model.fit(input_data, output_data, batch_size=1)
 
     def save_weights(self, path):
         self.model.save_weights(path)
