@@ -19,7 +19,7 @@ import windowPositioning
 import Recorder
 
 #Specific imports
-from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT
+from globalConstants import RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT
 
 
 class Recorder(Thread):
@@ -28,6 +28,8 @@ class Recorder(Thread):
         Thread.__init__(self)
         np.set_printoptions(threshold=np.inf)
         self.data = []
+        self.data_screens = []
+        self.data_inputs = []
         self.index = index
         self.input_array = np.zeros(len(smashMeleeInputs.getSmashMeleeInputs()))
 
@@ -39,27 +41,33 @@ class Recorder(Thread):
         start = time.time()
         has_not_surpass_memory_limit = True
         data = []
+        data_screens = []
+        data_inputs = []
         mem_size = 0
         mem_limit = 1 * math.pow(10,9) # 1 GB
 
         while has_not_surpass_memory_limit == True:
-            screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
+            screen = grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
             mem_size = mem_size + getsizeof(screen)
-            data.append([screen, self.input_array])
+            data_screens.append(screen)
+            data_inputs.append(self.input_array.copy())
+            data.append([screen, self.input_array.copy()])
             if(mem_size + getsizeof(data) >  mem_limit):
                 end = time.time()
                 print("Recording Finished [" + str(self.index) + "] (" + str(end-start) + " seconds)")
                 self.data = data
+                self.data_screens = data_screens
+                self.data_inputs = data_inputs
                 keyboard.unhook_all()
                 has_not_surpass_memory_limit = False
 
 
     def on_press_callback(self, event):
         if(event.name in keyInputs.inputDist):
-            if (self.input_array[keyInputs.inputDist[event.name][0]] == 0):
+            if (keyboard.is_pressed(event.name)):
                 self.input_array[keyInputs.inputDist[event.name][0]] = 1
             else : 
                 self.input_array[keyInputs.inputDist[event.name][0]] = 0
 
     def get_data(self):
-        return self.data
+        return self.data_screens, self.data_inputs

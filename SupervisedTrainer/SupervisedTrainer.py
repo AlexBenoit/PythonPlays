@@ -1,5 +1,6 @@
 
 #External imports
+import tensorflow as tf
 import numpy as np
 import os, os.path
 import sys
@@ -8,8 +9,8 @@ import sys
 import grabScreen
 
 #Specific imports
-#from tensorflowNN import DQNSolver
-from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, \
+from tensorflowNN import DQNSolver
+from globalConstants import RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT, \
 MODEL_PATH, MODEL_WEIGHTS_PATH
 
 def main():
@@ -19,7 +20,7 @@ def main():
 
     files_in_directory = [name for name in os.listdir('./Training Data') if os.path.isfile("./Training Data/" + name)]
 
-    dqn_solver = DQNSolver((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X))
+    dqn_solver = DQNSolver((RECORDING_HEIGHT - RECORDING_Y, RECORDING_WIDTH - RECORDING_X))
 
     files_in_directory = files_in_directory[index:]
 
@@ -27,14 +28,15 @@ def main():
         print("Training started for : " + file)
         data = np.load('./Training Data/' + file)
         main_array = data.f.arr_0
-        dqn_solver.fit(np.array(array_to_list(main_array[::10,0], 1)), np.array(array_to_list(main_array[::10,1], 1)))
+        screens = np.array(array_to_list(main_array[::10,0,160:1121], 1))
+        inputs = np.array(array_to_list(main_array[::10,1], 1))
+        dqn_solver.fit(screens, inputs)
 
 
     dqn_solver.save_weights(MODEL_WEIGHTS_PATH)
     dqn_solver.save_model(MODEL_PATH)
 
 def array_to_list(array, level):
-    print("converting to list")
     if level == 0:
         return array
 
@@ -48,10 +50,7 @@ def array_to_list(array, level):
         return array
 
 if __name__ == "__main__":
-    #main()
-
-    from tensorflow.python.client import device_lib
-
-    print(device_lib.list_local_devices())
-    with tf.device('/cpu:0'):
-        print("using gpu")
+    main()
+    screen = np.array([[1,2,3,4,5], [6,7,8,9,10],[11,12,13,14,15]])
+    screens = np.array([screen])
+    print("hello")

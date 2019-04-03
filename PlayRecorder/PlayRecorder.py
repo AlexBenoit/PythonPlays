@@ -29,8 +29,8 @@ def start_recording():
     while recording == True:
         if  keyboard.is_pressed("esc"):
            recording = False
-        data = record(index)
-        new_writer = Writer.Writer(index, data)
+        data_screens, data_inputs = record(index)
+        new_writer = Writer.Writer(index, data_screens, data_inputs)
         new_writer.start()
         index = index + 1
        
