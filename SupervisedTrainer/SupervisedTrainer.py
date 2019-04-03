@@ -28,7 +28,7 @@ def main():
         print("Training started for : " + file)
         data = np.load('./Training Data/' + file)
         main_array = data.f.arr_0
-        screens = np.array(array_to_list(main_array[::10,0,160:1121], 1))
+        screens = np.array(array_to_list(main_array[::10,0], 1))
         inputs = np.array(array_to_list(main_array[::10,1], 1))
         dqn_solver.fit(screens, inputs)
 

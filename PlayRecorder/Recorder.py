@@ -52,6 +52,10 @@ class Recorder(Thread):
             data_screens.append(screen)
             data_inputs.append(self.input_array.copy())
             data.append([screen, self.input_array.copy()])
+            # Show user what is recording
+            print(self.input_array)
+            cv2.imshow("window", screen)
+            cv2.waitKey(1)
             if(mem_size + getsizeof(data) >  mem_limit):
                 end = time.time()
                 print("Recording Finished [" + str(self.index) + "] (" + str(end-start) + " seconds)")
