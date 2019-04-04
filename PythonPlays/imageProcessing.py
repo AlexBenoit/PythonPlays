@@ -11,12 +11,12 @@ DIGIT_WIDTH = 45
 DIGIT_HEIGHT = 55
 
 def processNumber(image):
-     crop_img6 = image[610:610+DIGIT_HEIGHT, 381:381+DIGIT_WIDTH]
-     crop_img5 = image[610:610+DIGIT_HEIGHT, 336:336+DIGIT_WIDTH]
-     crop_img4 = image[610:610+DIGIT_HEIGHT, 291:291+DIGIT_WIDTH]
-     crop_img3 = image[610:610+DIGIT_HEIGHT, 173:173+DIGIT_WIDTH]
-     crop_img2 = image[610:610+DIGIT_HEIGHT, 128:128+DIGIT_WIDTH]
-     crop_img1 = image[610:610+DIGIT_HEIGHT, 83:83+DIGIT_WIDTH]
+     crop_img6 = image[610:610+DIGIT_HEIGHT, 339:339+DIGIT_WIDTH]
+     crop_img5 = image[610:610+DIGIT_HEIGHT, 294:294+DIGIT_WIDTH]
+     crop_img4 = image[610:610+DIGIT_HEIGHT, 249:249+DIGIT_WIDTH]
+     crop_img3 = image[610:610+DIGIT_HEIGHT, 131:131+DIGIT_WIDTH]
+     crop_img2 = image[610:610+DIGIT_HEIGHT, 86:86+DIGIT_WIDTH]
+     crop_img1 = image[610:610+DIGIT_HEIGHT, 41:41+DIGIT_WIDTH]
 
      crop_img1[np.where((crop_img1 >= 5))] = 255
      crop_img6[np.where((crop_img6 >= 5))] = 255
