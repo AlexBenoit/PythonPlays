@@ -28,8 +28,11 @@ from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, REC
 def start_playing():
     #Create initial variables 
     screen = grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
-    dqn_solver = DQNSolver((RECORDING_HEIGHT - RECORDING_Y, RECORDING_WIDTH - RECORDING_X))
+    
+    dqn_solver = DQNSolver((RECORDING_HEIGHT/2, RECORDING_WIDTH/2))
     dqn_solver.load_model(MODEL_PATH)
+
+    
     #load the digit recognition learning
     frameComparator = FrameComparator()
     digitAnalzer = TextAnalyzer()

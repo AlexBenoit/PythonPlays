@@ -22,7 +22,7 @@ def main():
 
     files_in_directory = [name for name in os.listdir('./Training Data') if os.path.isfile("./Training Data/" + name)]
 
-    dqn_solver = DQNSolver(((RECORDING_HEIGHT - RECORDING_Y)/2, (RECORDING_WIDTH - RECORDING_X)/2))
+    dqn_solver = DQNSolver((RECORDING_HEIGHT/2, RECORDING_WIDTH/2))
 
     files_in_directory = files_in_directory[index:]
 
