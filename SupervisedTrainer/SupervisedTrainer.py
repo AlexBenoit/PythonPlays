@@ -30,16 +30,11 @@ def main():
         start = time.time()
         print("Training started for : " + file)
         data = np.load('./Training Data/' + file)
-        main_array = data.f.arr_0
-        max_res_input_array = np.array(array_to_list(main_array[::10,0], 1))
-        resize_input_array = []
-        for i, screen in enumerate(max_res_input_array):
-            width = int(screen.shape[1] * 50/ 100)
-            height = int(screen.shape[0] * 50/ 100)
-            dim = (width, height)
-            resize_input_array.append(cv2.resize(screen, dim, interpolation=cv2.INTER_LANCZOS4))
-        output_array = np.array(array_to_list(main_array[::10,1], 1))
-        dqn_solver.fit(np.array(resize_input_array), output_array)
+        data_screens = data.f.arr_0[::10].copy()
+        data_inputs = data.f.arr_1[::10].copy()
+        for i, screen in enumerate(data_screens):
+            cv2.resize(screen, (RECORDING_WIDTH/2, RECORDING_HEIGHT/2), interpolation=cv2.INTER_LANCZOS4)
+        dqn_solver.fit(data_screens, data_inputs)
         end = time.time()
         print("Time for file : " + file + " = " + str(end-start) + " seconds")
 
