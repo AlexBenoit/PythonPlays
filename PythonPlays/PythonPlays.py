@@ -21,14 +21,14 @@ from gameStartAnalyzer import GameStartAnalyzer
 #Specific imports
 from textAnalyzer import TextAnalyzer
 from tensorflowNN import DQNSolver
-from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT
+from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT
 
 
 
 def start_playing():
     #Create initial variables 
-    screen = grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
-    dqn_solver = DQNSolver((WINDOW_HEIGHT - WINDOW_Y, WINDOW_WIDTH - WINDOW_X))
+    screen = grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
+    dqn_solver = DQNSolver((RECORDING_HEIGHT/2, RECORDING_WIDTH/2))
     
     #load the digit recognition learning
     frameComparator = FrameComparator()
@@ -37,8 +37,8 @@ def start_playing():
 
     # loop until game start
     while True:
-        screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
-        cropped = screen[130:490, 320:960]
+        screen =  grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
+        cropped = screen[130:490, 118:758]
         cropped[np.where((cropped >= 5))] = 255
         cropped = cv2.resize(cropped,(64,36))
         prediction = gameStartAnalyzer.predict(cropped)
@@ -61,13 +61,13 @@ def start_playing():
         action = dqn_solver.get_action(screen)
         dqn_solver.take_action(action)
         oldScreen = screen.copy()
-        screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
-        reward = frameComparator.compareWithLastFrame(screen)
-        dqn_solver.remember(oldScreen, action, reward, screen)
-        dqn_solver.experience_replay()
+        screen =  grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
+        #reward = frameComparator.compareWithLastFrame(screen)
+        #dqn_solver.remember(oldScreen, action, reward, screen)
+        #dqn_solver.experience_replay()
 
-        #cv2.imshow("window", screen) # Window showing what is captured
-        #cv2.waitKey(1)
+        cv2.imshow("window", screen) # Window showing what is captured
+        cv2.waitKey(1)
         
         print('loop took {} seconds'.format(time.time()-last_time))
         last_time = time.time()
@@ -75,15 +75,8 @@ def start_playing():
     print("done")
 
 def main():
-    print("starting")
-    for i in range(4):
-        print(i+1)
-        time.sleep(1)
-
-
     window = windowPositioning.openWindow("Smash Melee")
-    window.positionWindow(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
-
+    window.positionWindow(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT)
 
     start_playing()
 

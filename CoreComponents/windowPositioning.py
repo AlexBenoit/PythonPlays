@@ -28,5 +28,4 @@ def openWindow(window):
     if(window == "Smash Melee"):
         dolphin = subprocess.Popen([pwd +'\..\Dolphin\Dolphin.exe', '-b', '-e=' + pwd + '\..\Dolphin\ISOs\Super Smash Bros. Melee (USA).iso']) #Hard coded path
         time.sleep(2) #laisse le temps a l'emulateur de launch
-        print(dolphin.pid)
         return Window(win32gui.FindWindow(None, 'Dolphin'))

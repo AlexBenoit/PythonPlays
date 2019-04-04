@@ -45,6 +45,9 @@
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Tests\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\CoreComponents\CoreComponents.pyproj">
       <Name>CoreComponents</Name>
       <Project>{792c0e65-c099-4e9c-9328-3ca665f27e36}</Project>
@@ -52,13 +55,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Tests\" />
-  </ItemGroup>
-  <ItemGroup>
     <Interpreter Include="PythonPlaysEnv\">
       <Id>PythonPlaysEnv</Id>
-      <Version>3.7</Version>
-      <Description>PythonPlaysEnv (Python 3.7 (64-bit))</Description>
+      <Version>3.6</Version>
+      <Description>PythonPlaysEnv (Python 3.6 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
