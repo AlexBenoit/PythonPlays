@@ -120,7 +120,7 @@ class DQNSolver:
         self.model.load_weights(path)
 
     def load_model(self, path):
-        self.model.load_model(path)
+        self.model = tf.keras.models.load_model(path)
 
 if __name__ == "__main__":
 

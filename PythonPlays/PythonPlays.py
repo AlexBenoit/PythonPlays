@@ -21,7 +21,7 @@ from gameStartAnalyzer import GameStartAnalyzer
 #Specific imports
 from textAnalyzer import TextAnalyzer
 from tensorflowNN import DQNSolver
-from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT
+from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT, MODEL_PATH
 
 
 
@@ -29,7 +29,7 @@ def start_playing():
     #Create initial variables 
     screen = grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
     dqn_solver = DQNSolver((RECORDING_HEIGHT - RECORDING_Y, RECORDING_WIDTH - RECORDING_X))
-    
+    dqn_solver.load_model(MODEL_PATH)
     #load the digit recognition learning
     frameComparator = FrameComparator()
     digitAnalzer = TextAnalyzer()
@@ -58,6 +58,7 @@ def start_playing():
             break
 
         #Main decision making logic
+        screen = cv2.resize(screen, (int((RECORDING_WIDTH - RECORDING_X)/2), int((RECORDING_HEIGHT - RECORDING_Y)/2)), interpolation=cv2.INTER_LANCZOS4)
         action = dqn_solver.get_action(screen)
         dqn_solver.take_action(action)
         oldScreen = screen.copy()
