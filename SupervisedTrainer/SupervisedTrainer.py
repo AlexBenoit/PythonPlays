@@ -22,7 +22,7 @@ def main():
 
     files_in_directory = [name for name in os.listdir('./Training Data') if os.path.isfile("./Training Data/" + name)]
 
-    dqn_solver = DQNSolver((RECORDING_HEIGHT - RECORDING_Y, RECORDING_WIDTH - RECORDING_X))
+    dqn_solver = DQNSolver(((RECORDING_HEIGHT - RECORDING_Y)/2, (RECORDING_WIDTH - RECORDING_X)/2))
 
     files_in_directory = files_in_directory[index:]
 
@@ -30,16 +30,19 @@ def main():
         start = time.time()
         print("Training started for : " + file)
         data = np.load('./Training Data/' + file)
-        data_screens = data.f.arr_0[::10].copy()
+        max_size_data_screens = data.f.arr_0[::10].copy()
+        resized_data_screens = []
         data_inputs = data.f.arr_1[::10].copy()
-        for i, screen in enumerate(data_screens):
-            cv2.resize(screen, (RECORDING_WIDTH/2, RECORDING_HEIGHT/2), interpolation=cv2.INTER_LANCZOS4)
-        dqn_solver.fit(data_screens, data_inputs)
+        for i, screen in enumerate(max_size_data_screens):
+            print(data_inputs[i])
+            cv2.imshow("window", screen)
+            cv2.waitKey(5)
+            screen = cv2.resize(screen, (int((RECORDING_WIDTH - RECORDING_X)/2), int((RECORDING_HEIGHT - RECORDING_Y)/2)), interpolation=cv2.INTER_LANCZOS4)
+            resized_data_screens.append(screen)
+        dqn_solver.fit(np.array(resized_data_screens), data_inputs)
         end = time.time()
         print("Time for file : " + file + " = " + str(end-start) + " seconds")
 
-
-    dqn_solver.save_weights(MODEL_WEIGHTS_PATH)
     dqn_solver.save_model(MODEL_PATH)
 
 def array_to_list(array, level):
