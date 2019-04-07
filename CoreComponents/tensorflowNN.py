@@ -14,7 +14,7 @@ import smashMeleeInputs
 from collections import deque
 from threading import Thread
 from arrayUtility import array_to_list
-from globalConstants import MODEL_PATH
+from globalConstants import RECORDING_WIDTH, RECORDING_HEIGHT, MODEL_PATH
 
 ENV_NAME = "CartPole-v1"
 
@@ -69,6 +69,7 @@ class DQNSolver:
 
         #if np.random.rand() < self.exploration_rate:
             #return random.randrange(self.action_space)
+        screen = np.reshape(screen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2), 1))
         q_values = self.model.predict(np.array([screen]))
         return q_values[0]
 

@@ -68,7 +68,7 @@ def start_playing():
         reward = frameComparator.compareWithLastFrame(screen)
         screen = cv2.resize(screen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2)), interpolation=cv2.INTER_LANCZOS4)
         dqn_solver.remember(oldScreen, action, reward, screen)
-        #dqn_solver.experience_replay()
+        dqn_solver.experience_replay()
 
         cv2.imshow("window", screen) # Window showing what is captured
         cv2.waitKey(1)
