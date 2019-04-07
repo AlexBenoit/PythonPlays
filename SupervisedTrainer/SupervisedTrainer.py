@@ -31,9 +31,9 @@ def main():
         start = time.time()
         print("Training started for : " + file)
         data = np.load('./Training Data/' + file)
-        max_size_data_screens = data.f.arr_0[::10].copy()
+        max_size_data_screens = data.f.arr_0.copy()
         resized_data_screens = []
-        data_inputs = data.f.arr_1[::10].copy()
+        data_inputs = data.f.arr_1.copy()
         for i, screen in enumerate(max_size_data_screens):
             cv2.imshow("window", screen)
             cv2.waitKey(1)
