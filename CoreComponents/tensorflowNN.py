@@ -50,8 +50,10 @@ class DQNSolver:
         width, height = input_dimension
 
         self.model = tf.keras.Sequential([
-            tf.keras.layers.Flatten(input_shape=(width, height)),
-            tf.keras.layers.Dense(LAYER1_NB_NEURONS, activation=tf.nn.relu),
+            tf.keras.layers.Conv2D(32, (3, 3), input_shape = (width, height, 1), activation = 'relu'),
+            tf.keras.layers.MaxPooling2D(pool_size=(2,2)),
+            tf.keras.layers.Flatten(),
+            tf.keras.layers.Dense(units=LAYER1_NB_NEURONS, activation=tf.nn.relu),
             tf.keras.layers.Dense(len(self.inputArray), activation=tf.nn.sigmoid)
         ])
 
@@ -96,7 +98,7 @@ class DQNSolver:
         if len(self.memory) < BATCH_SIZE:
             return
 
-        #learner = Learner(self.memory, self)
+        #learner = Learner(self)
         #learner.start()
 
         terminal = False #DO NOT DELETE!! Needed to keep general structure
@@ -106,9 +108,11 @@ class DQNSolver:
         batch = random.sample(self.memory, BATCH_SIZE)
         for oldScreen, action, reward, screen in batch:
             if not terminal:
+                screen = np.reshape(screen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2), 1))
                 q_update = self.model.predict(np.array([screen]))[0]
                 for index_2, (value) in enumerate(np.nditer(q_update, op_flags=['readwrite'])):
                     value[...] = (1 - LEARNING_RATE) * action[index_2] + LEARNING_RATE * (reward + GAMMA * value)
+            oldScreen = np.reshape(oldScreen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2), 1))
             data_screens.append(oldScreen)
             data_inputs.append(q_update)
         
@@ -138,9 +142,8 @@ class DQNSolver:
         self.model = tf.keras.models.load_model(path)
 
 class Learner(Thread):
-    def __init__(self, memory, solver):
+    def __init__(self,solver):
         Thread.__init__(self)
-        self.memory = memory.copy()
         self.solver = solver
  
     def run(self):
@@ -148,12 +151,14 @@ class Learner(Thread):
         
         data_screens = []
         data_inputs = []
-        batch = random.sample(self.memory, BATCH_SIZE)
+        batch = random.sample(self.solver.memory, BATCH_SIZE)
         for oldScreen, action, reward, screen in batch:
             if not terminal:
+                screen = np.reshape(screen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2), 1))
                 q_update = self.solver.model.predict(np.array([screen]))[0]
                 for index_2, (value) in enumerate(np.nditer(q_update, op_flags=['readwrite'])):
                     value[...] = (1 - LEARNING_RATE) * action[index_2] + LEARNING_RATE * (reward + GAMMA * value)
+            oldScreen = np.reshape(oldScreen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2), 1))
             data_screens.append(oldScreen)
             data_inputs.append(q_update)
         
