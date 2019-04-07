@@ -1,18 +1,26 @@
+#External imports
+import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
 import gym
 import random
-import matplotlib.pyplot as plt
-from collections import deque
 import random
 import time
+
+#Internal imports
 import smashMeleeInputs
+
+#Specific imports
+from collections import deque
+from threading import Thread
+from arrayUtility import array_to_list
+from globalConstants import MODEL_PATH
 
 ENV_NAME = "CartPole-v1"
 
 GAMMA = 0.95
 LEARNING_RATE = 0.001
-
+INPUT_CERTAINTY = 0.95
 MEMORY_SIZE = 1000000
 BATCH_SIZE = 20
 
@@ -27,7 +35,6 @@ class DQNSolver:
     def __init__(self, input_dimension):
         self.inputArray = np.zeros(len(smashMeleeInputs.getSmashMeleeInputs()))
         self.oldInputArray = self.inputArray.copy()
-
         self.exploration_rate = EXPLORATION_MAX
 
         #self.action_space = action_space
@@ -66,7 +73,7 @@ class DQNSolver:
     def take_action(self, action):
 
         for index, action_input_value in np.ndenumerate(action):
-            if (action_input_value > 0.95):
+            if (action_input_value > INPUT_CERTAINTY):
                 self.inputArray[index] = 1
             else:
                 self.inputArray[index] = 0
@@ -85,30 +92,38 @@ class DQNSolver:
             if(self.inputArray[index] == 1):
                 smashMeleeInputs.releaseKey(index)
 
-    def experience_replay(self):
-        terminal = False #DO NOT DELETE!! Needed to keep general structure 
-
+    def experience_replay(self): 
         if len(self.memory) < BATCH_SIZE:
             return
 
-        def updateQValue(value):
-            return reward + GAMMA * value
+        #learner = Learner(self.memory, self)
+        #learner.start()
 
+        terminal = False #DO NOT DELETE!! Needed to keep general structure
+        
+        data_screens = []
+        data_inputs = []
         batch = random.sample(self.memory, BATCH_SIZE)
         for oldScreen, action, reward, screen in batch:
-            q_update = self.model.predict(np.array([screen]))[0]
             if not terminal:
-                #q_update = (reward + GAMMA * np.amax(self.model.predict(np.array([screen]))[0]))
-                q_update = np.apply_along_axis(updateQValue, 0, self.model.predict(np.array([screen]))[0])
-            #q_values = self.model.predict(state)
-            #q_values[0][action] = q_update
-            self.model.fit(np.array([oldScreen]), np.array([q_update]), verbose=0)
+                q_update = self.model.predict(np.array([screen]))[0]
+                for index_2, (value) in enumerate(np.nditer(q_update, op_flags=['readwrite'])):
+                    value[...] = (1 - LEARNING_RATE) * action[index_2] + LEARNING_RATE * (reward + GAMMA * value)
+            data_screens.append(oldScreen)
+            data_inputs.append(q_update)
+        
+        self.model.fit(np.array(data_screens), np.array(data_inputs))
         self.exploration_rate *= EXPLORATION_DECAY
         self.exploration_rate = max(EXPLORATION_MIN, self.exploration_rate)
+        try:
+            self.save_model(MODEL_PATH)
+        except:
+            print("COULD NOT SAVE MODEL")
+        
 
     def fit(self, input_data, output_data):
         print("Fitting model")
-        self.model.fit(input_data, output_data, batch_size=1)
+        self.model.fit(input_data, output_data)
 
     def save_weights(self, path):
         self.model.save_weights(path)
@@ -121,6 +136,34 @@ class DQNSolver:
 
     def load_model(self, path):
         self.model = tf.keras.models.load_model(path)
+
+class Learner(Thread):
+    def __init__(self, memory, solver):
+        Thread.__init__(self)
+        self.memory = memory.copy()
+        self.solver = solver
+ 
+    def run(self):
+        terminal = False #DO NOT DELETE!! Needed to keep general structure
+        
+        data_screens = []
+        data_inputs = []
+        batch = random.sample(self.memory, BATCH_SIZE)
+        for oldScreen, action, reward, screen in batch:
+            if not terminal:
+                q_update = self.solver.model.predict(np.array([screen]))[0]
+                for index_2, (value) in enumerate(np.nditer(q_update, op_flags=['readwrite'])):
+                    value[...] = (1 - LEARNING_RATE) * action[index_2] + LEARNING_RATE * (reward + GAMMA * value)
+            data_screens.append(oldScreen)
+            data_inputs.append(q_update)
+        
+        self.solver.model.fit(np.array(data_screens), np.array(data_inputs))
+        self.solver.exploration_rate *= EXPLORATION_DECAY
+        self.solver.exploration_rate = max(EXPLORATION_MIN, self.exploration_rate)
+        try:
+            self.solver.save_model(MODEL_PATH)
+        except:
+            print("COULD NOT SAVE MODEL")
 
 if __name__ == "__main__":
 

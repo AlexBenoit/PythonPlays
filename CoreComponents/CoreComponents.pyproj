@@ -22,6 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="arrayUtility.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CoreComponents.py" />
     <Compile Include="globalConstants.py">
       <SubType>Code</SubType>

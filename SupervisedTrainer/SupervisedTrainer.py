@@ -12,6 +12,7 @@ import grabScreen
 
 #Specific imports
 from tensorflowNN import DQNSolver
+from arrayUtility import array_to_list
 from globalConstants import RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT, \
 MODEL_PATH, MODEL_WEIGHTS_PATH
 
@@ -34,29 +35,16 @@ def main():
         resized_data_screens = []
         data_inputs = data.f.arr_1[::10].copy()
         for i, screen in enumerate(max_size_data_screens):
-            print(data_inputs[i])
             cv2.imshow("window", screen)
-            cv2.waitKey(5)
-            screen = cv2.resize(screen, (int((RECORDING_WIDTH - RECORDING_X)/2), int((RECORDING_HEIGHT - RECORDING_Y)/2)), interpolation=cv2.INTER_LANCZOS4)
+            cv2.waitKey(1)
+            screen = cv2.resize(screen, (int((RECORDING_WIDTH)/2), int((RECORDING_HEIGHT)/2)), interpolation=cv2.INTER_LANCZOS4)
+            print(screen.shape)
             resized_data_screens.append(screen)
         dqn_solver.fit(np.array(resized_data_screens), data_inputs)
         end = time.time()
         print("Time for file : " + file + " = " + str(end-start) + " seconds")
 
     dqn_solver.save_model(MODEL_PATH)
-
-def array_to_list(array, level):
-    if level == 0:
-        return array
-
-    if isinstance(array, np.ndarray):
-        return array_to_list(array.tolist(), level - 1)
-    elif isinstance(array, list):
-        return [array_to_list(item, level - 1) for item in array]
-    elif isinstance(array, tuple):
-        return tuple(array_to_list(item, level - 1) for item in array)
-    else:
-        return array
 
 if __name__ == "__main__":
     main()

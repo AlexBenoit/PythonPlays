@@ -30,7 +30,7 @@ def start_playing():
     screen = grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
     
     dqn_solver = DQNSolver((RECORDING_HEIGHT/2, RECORDING_WIDTH/2))
-    dqn_solver.load_model(MODEL_PATH)
+    #dqn_solver.load_model(MODEL_PATH)
 
     
     #load the digit recognition learning
@@ -50,7 +50,7 @@ def start_playing():
             print('GAME STARTED')
             break
 
-    
+    screen = cv2.resize(screen, (int(RECORDING_WIDTH/2), int(RECORDING_HEIGHT/2)), interpolation=cv2.INTER_LANCZOS4)
     last_time = time.time()
 
     while True:
@@ -61,14 +61,14 @@ def start_playing():
             break
 
         #Main decision making logic
-        screen = cv2.resize(screen, (int((RECORDING_WIDTH - RECORDING_X)/2), int((RECORDING_HEIGHT - RECORDING_Y)/2)), interpolation=cv2.INTER_LANCZOS4)
         action = dqn_solver.get_action(screen)
         dqn_solver.take_action(action)
         oldScreen = screen.copy()
         screen =  grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
-        #reward = frameComparator.compareWithLastFrame(screen)
-        #dqn_solver.remember(oldScreen, action, reward, screen)
-        #dqn_solver.experience_replay()
+        reward = frameComparator.compareWithLastFrame(screen)
+        screen = cv2.resize(screen, (int(RECORDING_WIDTH/2), int(RECORDING_HEIGHT/2)), interpolation=cv2.INTER_LANCZOS4)
+        dqn_solver.remember(oldScreen, action, reward, screen)
+        dqn_solver.experience_replay()
 
         cv2.imshow("window", screen) # Window showing what is captured
         cv2.waitKey(1)
@@ -79,6 +79,11 @@ def start_playing():
     print("done")
 
 def main():
+    print("starting")
+    for i in range(4):
+        print(i+1)
+        time.sleep(1)
+
     window = windowPositioning.openWindow("Smash Melee")
     window.positionWindow(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT)
 
