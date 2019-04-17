@@ -1,6 +1,5 @@
 
 #External imports
-import tensorflow as tf
 import numpy as np
 import os, os.path
 import sys
@@ -41,6 +40,7 @@ def main():
                 cv2.imshow("window", screen)
                 cv2.waitKey(1)
                 screen = cv2.resize(screen, (int((RECORDING_WIDTH)/2), int((RECORDING_HEIGHT)/2)), interpolation=cv2.INTER_LANCZOS4)
+                screen = np.reshape(screen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2), 1))
                 print(screen.shape)
                 resized_data_screens.append(screen)
                 print(screen)
