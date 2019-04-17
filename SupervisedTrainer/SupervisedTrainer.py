@@ -6,6 +6,7 @@ import os, os.path
 import sys
 import cv2
 import time
+import json
 
 #Internal imports
 import grabScreen
@@ -24,27 +25,32 @@ def main():
     files_in_directory = [name for name in os.listdir('./Training Data') if os.path.isfile("./Training Data/" + name)]
 
     dqn_solver = DQNSolver((RECORDING_HEIGHT/2, RECORDING_WIDTH/2))
+    #dqn_solver.load_model(MODEL_PATH)
 
     files_in_directory = files_in_directory[index:]
 
     for file in files_in_directory:
         start = time.time()
         print("Training started for : " + file)
-        data = np.load('./Training Data/' + file)
-        max_size_data_screens = data.f.arr_0.copy()
-        resized_data_screens = []
-        data_inputs = data.f.arr_1.copy()
-        for i, screen in enumerate(max_size_data_screens):
-            cv2.imshow("window", screen)
-            cv2.waitKey(1)
-            screen = cv2.resize(screen, (int((RECORDING_WIDTH)/2), int((RECORDING_HEIGHT)/2)), interpolation=cv2.INTER_LANCZOS4)
-            print(screen.shape)
-            resized_data_screens.append(screen)
-        dqn_solver.fit(np.array(resized_data_screens), data_inputs)
-        end = time.time()
-        print("Time for file : " + file + " = " + str(end-start) + " seconds")
-
-    dqn_solver.save_model(MODEL_PATH)
+        try:
+            data = np.load('./Training Data/' + file)
+            max_size_data_screens = data.f.arr_0.copy()
+            resized_data_screens = []
+            data_inputs = data.f.arr_1.copy()
+            for i, screen in enumerate(max_size_data_screens):
+                cv2.imshow("window", screen)
+                cv2.waitKey(1)
+                screen = cv2.resize(screen, (int((RECORDING_WIDTH)/2), int((RECORDING_HEIGHT)/2)), interpolation=cv2.INTER_LANCZOS4)
+                print(screen.shape)
+                resized_data_screens.append(screen)
+                print(screen)
+            dqn_solver.fit(np.array(resized_data_screens), data_inputs)
+            end = time.time()
+            print("Time for file : " + file + " = " + str(end-start) + " seconds")
+            
+            dqn_solver.save_model(MODEL_PATH)
+        except:
+            print("Can not load file")
 
 if __name__ == "__main__":
     main()
