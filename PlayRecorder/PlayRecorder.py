@@ -1,28 +1,56 @@
 #!/usr/bin/python
 
+#External imports
+import keyboard
+import csv
 import time
-import cv2
-import grabScreen
 
-WINDOW_X = 1                                # Default image position for a window perfectly in top left corner
-WINDOW_Y = 38                               # Default image position for a window perfectly in top left corner
-WINDOW_WIDTH = 1280                         # Modify these values for a window snapped in top left corner
-WINDOW_HEIGHT = 720                         # Modify these values for a window snapped in top left corner
+
+#Internal imports
+import windowPositioning
+import Recorder
+import Writer
+
+#Specific imports
+from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT
+
+recording = False
 
 def start_recording():
-    screen = None
+    ready_to_record = False
 
-    while True:
-        screen =  grabScreen.grab_screen_GRAY(region=(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT))
+    while not ready_to_record:
+        if keyboard.is_pressed("r"):
+            ready_to_record = True
 
-        cv2.imshow("window", screen) # Window showing what is captured
-        cv2.waitKey(1)
+    recording = True
+    index = 0
+
+    while recording == True:
+        if  keyboard.is_pressed("esc"):
+           recording = False
+        data_screens, data_inputs = record(index)
+        new_writer = Writer.Writer(index, data_screens, data_inputs)
+        new_writer.start()
+        index = index + 1
+       
+    
+def record(index):
+    record_thread = Recorder.Recorder(index)
+    record_thread.start()
+    record_thread.join()
+    return record_thread.get_data()
+
+
 
 def main():
     print("starting")
     for i in range(4):
         print(i+1)
         time.sleep(1)
+
+    window = windowPositioning.openWindow("Smash Melee")
+    window.positionWindow(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
 
     start_recording()
 

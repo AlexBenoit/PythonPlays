@@ -22,8 +22,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="arrayUtility.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CoreComponents.py" />
-    <Compile Include="generateClassifier.py" />
     <Compile Include="globalConstants.py">
       <SubType>Code</SubType>
     </Compile>
@@ -32,6 +34,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="keyInputs.py" />
+    <Compile Include="object_detector.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="performRecognition.py" />
     <Compile Include="smashMeleeInputs.py" />
     <Compile Include="tensorflowNN.py" />
     <Compile Include="textAnalyzer.py">
@@ -43,15 +49,18 @@
     <Compile Include="Tests\__init__.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="textAnalyser.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="windowPositioning.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="__init__.py">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="requirements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tests\" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="CoreComponentsEnv\">
@@ -63,12 +72,6 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="requirements.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tests\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

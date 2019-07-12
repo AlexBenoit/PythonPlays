@@ -22,7 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="createTrainingData.py" />
+    <Compile Include="Recorder.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PlayRecorder.py" />
     <Compile Include="Tests\test_keyboard_capture.py">
       <SubType>Code</SubType>
@@ -30,16 +32,19 @@
     <Compile Include="Tests\__init__.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Writer.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="__init__.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CoreComponents\CoreComponents.pyproj">
-      <Name>CoreComponents</Name>
-      <Project>{792c0e65-c099-4e9c-9328-3ca665f27e36}</Project>
-      <Private>True</Private>
-    </ProjectReference>
+    <Folder Include="Tests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="constraints.txt" />
+    <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="PlayRecorderEnv\">
@@ -53,11 +58,11 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Tests\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="constraints.txt" />
-    <Content Include="requirements.txt" />
+    <ProjectReference Include="..\CoreComponents\CoreComponents.pyproj">
+      <Name>CoreComponents</Name>
+      <Project>{792c0e65-c099-4e9c-9328-3ca665f27e36}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -22,13 +22,11 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="FrameComparator.py">
+    <Compile Include="FrameComparator.py" />
+    <Compile Include="gameStartAnalyzer.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="imageProcessing.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="textAnalyse.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="pythonPlays.py" />
@@ -47,13 +45,6 @@
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CoreComponents\CoreComponents.pyproj">
-      <Name>CoreComponents</Name>
-      <Project>{792c0e65-c099-4e9c-9328-3ca665f27e36}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Tests\" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +57,13 @@
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
       <Architecture>X64</Architecture>
     </Interpreter>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CoreComponents\CoreComponents.pyproj">
+      <Name>CoreComponents</Name>
+      <Project>{792c0e65-c099-4e9c-9328-3ca665f27e36}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
