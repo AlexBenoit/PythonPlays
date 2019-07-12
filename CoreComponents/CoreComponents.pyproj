@@ -34,6 +34,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="keyInputs.py" />
+    <Compile Include="object_detector.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="smashMeleeInputs.py" />
     <Compile Include="tensorflowNN.py" />
     <Compile Include="textAnalyzer.py">
