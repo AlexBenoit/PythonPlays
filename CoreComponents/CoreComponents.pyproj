@@ -22,6 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="arrayUtility.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CoreComponents.py" />
     <Compile Include="globalConstants.py">
       <SubType>Code</SubType>
@@ -31,6 +34,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="keyInputs.py" />
+    <Compile Include="object_detector.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="performRecognition.py" />
     <Compile Include="smashMeleeInputs.py" />
     <Compile Include="tensorflowNN.py" />
     <Compile Include="textAnalyzer.py">

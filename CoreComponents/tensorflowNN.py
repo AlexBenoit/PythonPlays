@@ -1,18 +1,27 @@
+#External imports
+import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
 import gym
 import random
-import matplotlib.pyplot as plt
-from collections import deque
 import random
 import time
+import json
+
+#Internal imports
 import smashMeleeInputs
+
+#Specific imports
+from collections import deque
+from threading import Thread
+from arrayUtility import array_to_list
+from globalConstants import RECORDING_WIDTH, RECORDING_HEIGHT, MODEL_PATH
 
 ENV_NAME = "CartPole-v1"
 
 GAMMA = 0.95
 LEARNING_RATE = 0.001
-
+INPUT_CERTAINTY = 0.95
 MEMORY_SIZE = 1000000
 BATCH_SIZE = 20
 
@@ -25,32 +34,35 @@ LAYER1_NB_NEURONS = 128
 class DQNSolver:
 
     def __init__(self, input_dimension):
-        self.inputArray = np.zeros(len(smashMeleeInputs.getSmashMeleeInputs()))
-        self.oldInputArray = self.inputArray.copy()
+        with open('../list_inputs.json', 'r') as infile:
+            self.list_inputs = json.load(infile)
+            self.inputArray = np.zeros(len(smashMeleeInputs.getSmashMeleeInputs()))
+            self.oldInputArray = self.inputArray.copy()
+            self.exploration_rate = EXPLORATION_MAX
 
-        self.exploration_rate = EXPLORATION_MAX
+            #self.action_space = action_space
+            self.memory = deque(maxlen=MEMORY_SIZE)
 
-        #self.action_space = action_space
-        self.memory = deque(maxlen=MEMORY_SIZE)
+            # MODEL FOR CARTPOLE
+            #self.model = tf.keras.sequential()
+            #self.model.add(tf.keras.layers.dense(24, input_shape=(observation_space,), activation="relu"))
+            #self.model.add(tf.keras.layers.dense(24, activation="relu"))
+            #self.model.add(tf.keras.layers.dense(action_space, activation="linear"))
+            #self.model.compile(loss="mse", optimizer=tf.keras.optimizers.adam(lr=learning_rate))
 
-        # MODEL FOR CARTPOLE
-        #self.model = tf.keras.sequential()
-        #self.model.add(tf.keras.layers.dense(24, input_shape=(observation_space,), activation="relu"))
-        #self.model.add(tf.keras.layers.dense(24, activation="relu"))
-        #self.model.add(tf.keras.layers.dense(action_space, activation="linear"))
-        #self.model.compile(loss="mse", optimizer=tf.keras.optimizers.adam(lr=learning_rate))
+            width, height = input_dimension
 
-        width, height = input_dimension
+            self.model = tf.keras.Sequential([
+                tf.keras.layers.Conv2D(32, (3, 3), input_shape = (width, height, 1), activation = 'relu'),
+                tf.keras.layers.MaxPooling2D(pool_size=(2,2)),
+                tf.keras.layers.Flatten(),
+                tf.keras.layers.Dense(units=LAYER1_NB_NEURONS, activation=tf.nn.relu),
+                tf.keras.layers.Dense(len(self.list_inputs), activation=tf.nn.softmax)
+            ])
 
-        self.model = tf.keras.Sequential([
-            tf.keras.layers.Flatten(input_shape=(width, height)),
-            tf.keras.layers.Dense(LAYER1_NB_NEURONS, activation=tf.nn.relu),
-            tf.keras.layers.Dense(len(self.inputArray), activation=tf.nn.sigmoid)
-        ])
-
-        self.model.compile(optimizer='adam',
-                      loss='binary_crossentropy',
-                      metrics=['accuracy'])
+            self.model.compile(optimizer='adam',
+                          loss='categorical_crossentropy',
+                          metrics=['accuracy'])
 
     def remember(self, oldScreen, action, reward, screen):
         self.memory.append((oldScreen, action, reward, screen))
@@ -60,13 +72,15 @@ class DQNSolver:
 
         #if np.random.rand() < self.exploration_rate:
             #return random.randrange(self.action_space)
+        screen = np.reshape(screen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2), 1))
         q_values = self.model.predict(np.array([screen]))
         return q_values[0]
 
-    def take_action(self, action):
+    def take_action(self, fake_action):
+        action = self.list_inputs[np.argmax(fake_action)]
 
         for index, action_input_value in np.ndenumerate(action):
-            if (action_input_value > 0.95):
+            if (action_input_value > INPUT_CERTAINTY):
                 self.inputArray[index] = 1
             else:
                 self.inputArray[index] = 0
@@ -85,30 +99,49 @@ class DQNSolver:
             if(self.inputArray[index] == 1):
                 smashMeleeInputs.releaseKey(index)
 
-    def experience_replay(self):
-        terminal = False #DO NOT DELETE!! Needed to keep general structure 
-
+    def experience_replay(self): 
         if len(self.memory) < BATCH_SIZE:
             return
 
-        def updateQValue(value):
-            return reward + GAMMA * value
+        #learner = Learner(self)
+        #learner.start()
 
+        terminal = False #DO NOT DELETE!! Needed to keep general structure
+        
+        data_screens = []
+        data_inputs = []
         batch = random.sample(self.memory, BATCH_SIZE)
         for oldScreen, action, reward, screen in batch:
-            q_update = self.model.predict(np.array([screen]))[0]
             if not terminal:
-                #q_update = (reward + GAMMA * np.amax(self.model.predict(np.array([screen]))[0]))
-                q_update = np.apply_along_axis(updateQValue, 0, self.model.predict(np.array([screen]))[0])
-            #q_values = self.model.predict(state)
-            #q_values[0][action] = q_update
-            self.model.fit(np.array([oldScreen]), np.array([q_update]), verbose=0)
+                screen = np.reshape(screen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2), 1))
+                q_update = self.model.predict(np.array([screen]))[0]
+                for index_2, (value) in enumerate(np.nditer(q_update, op_flags=['readwrite'])):
+                    value[...] = (1 - LEARNING_RATE) * action[index_2] + LEARNING_RATE * (reward + GAMMA * value)
+            oldScreen = np.reshape(oldScreen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2), 1))
+            data_screens.append(oldScreen)
+            data_inputs.append(q_update)
+        
+        self.model.fit(np.array(data_screens), np.array(data_inputs))
         self.exploration_rate *= EXPLORATION_DECAY
         self.exploration_rate = max(EXPLORATION_MIN, self.exploration_rate)
+        try:
+            self.save_model(MODEL_PATH)
+        except:
+            print("COULD NOT SAVE MODEL")
+        
 
     def fit(self, input_data, output_data):
         print("Fitting model")
-        self.model.fit(input_data, output_data, batch_size=1)
+        real_output_data = []
+        for data in output_data:
+            data_append = np.zeros(len(self.list_inputs))
+            for index, input in enumerate(self.list_inputs):
+                if np.array_equal(input, data):
+                    data_append[index] = 1
+                    print(data_append)
+                    real_output_data.append(data_append)
+        real_output_data = np.array(real_output_data)
+        self.model.fit(input_data, np.array(real_output_data))
 
     def save_weights(self, path):
         self.model.save_weights(path)
@@ -121,6 +154,35 @@ class DQNSolver:
 
     def load_model(self, path):
         self.model = tf.keras.models.load_model(path)
+
+class Learner(Thread):
+    def __init__(self,solver):
+        Thread.__init__(self)
+        self.solver = solver
+ 
+    def run(self):
+        terminal = False #DO NOT DELETE!! Needed to keep general structure
+        
+        data_screens = []
+        data_inputs = []
+        batch = random.sample(self.solver.memory, BATCH_SIZE)
+        for oldScreen, action, reward, screen in batch:
+            if not terminal:
+                screen = np.reshape(screen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2), 1))
+                q_update = self.solver.model.predict(np.array([screen]))[0]
+                for index_2, (value) in enumerate(np.nditer(q_update, op_flags=['readwrite'])):
+                    value[...] = (1 - LEARNING_RATE) * action[index_2] + LEARNING_RATE * (reward + GAMMA * value)
+            oldScreen = np.reshape(oldScreen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2), 1))
+            data_screens.append(oldScreen)
+            data_inputs.append(q_update)
+        
+        self.solver.model.fit(np.array(data_screens), np.array(data_inputs))
+        self.solver.exploration_rate *= EXPLORATION_DECAY
+        self.solver.exploration_rate = max(EXPLORATION_MIN, self.exploration_rate)
+        try:
+            self.solver.save_model(MODEL_PATH)
+        except:
+            print("COULD NOT SAVE MODEL")
 
 if __name__ == "__main__":
 

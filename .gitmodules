@@ -1,0 +1,3 @@
+[submodule "TensorflowObjectDetection"]
+	path = TensorflowObjectDetection
+	url = https://github.com/AlexBenoit/models.git
