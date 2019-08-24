@@ -40,6 +40,9 @@
     <Compile Include="performRecognition.py" />
     <Compile Include="smashMeleeInputs.py" />
     <Compile Include="tensorflowNN.py" />
+    <Compile Include="tensorflowRNN.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="textAnalyzer.py">
       <SubType>Code</SubType>
     </Compile>

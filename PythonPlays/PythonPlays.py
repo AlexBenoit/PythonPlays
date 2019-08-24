@@ -78,6 +78,23 @@ def start_playing():
         
     print("done")
 
+def record_sreen():
+    # loop until game start
+    while True:
+        screen =  grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
+        cropped = screen[130:490, 118:758]
+        cropped[np.where((cropped >= 5))] = 255
+        cropped = cv2.resize(cropped,(64,36))
+        prediction = gameStartAnalyzer.predict(cropped)
+
+        if prediction == 1:
+            print('GAME STARTED')
+            break
+
+    while True:
+        screen =  grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
+
+
 def main():
     print("starting")
     for i in range(4):
@@ -85,9 +102,11 @@ def main():
         time.sleep(1)
 
     window = windowPositioning.openWindow("Smash Melee")
+    print(window)
     window.positionWindow(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT)
 
-    start_playing()
+    #start_playing()
+    #record_screen()
 
 if __name__ == '__main__':
     main()
