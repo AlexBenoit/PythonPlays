@@ -111,7 +111,7 @@ class RNNAgent(object):
                 uncertainty = min(0.9, 1.0 - confidence)  # Uncertainty is the opposite of confidence, limit to max of 0.9
                 self.epsilon = max(uncertainty, 0.1)  # Limit to min of 0.1  
 
-sess = tf.InteractiveSession()
+sess = tf.compat.v1.InteractiveSession()
 
 nb_inputs = 4
 nb_neurons = 30
@@ -127,15 +127,15 @@ X_batch = np.array([
 ])
 
 # define the shape of the data placeholder (tensor)
-state = tf.placeholder(tf.float32, [None, nb_timesteps, nb_inputs])
-actions = tf.placeholder(tf.int32, [None])
+state = tf.compat.v1.placeholder(tf.float32, [None, nb_timesteps, nb_inputs])
+actions = tf.compat.v1.placeholder(tf.int32, [None])
 
 # define network
-basic_lstm_cell = tf.contrib.rnn.BasicLSTMCell(num_units=nb_neurons)
+basic_lstm_cell = tf.keras.layers.LSTMCell(units=nb_neurons)
 learning_rate = 0.001
 
-lstm_cells = [tf.contrib.rnn.BasicLSTMCell(num_units=nb_neurons) for layer in range(nb_layers)]
-multi_cell = tf.contrib.rnn.MultiRNNCell(lstm_cells)
+lstm_cells = [tf.keras.layers.LSTMCell(units=nb_neurons) for layer in range(nb_layers)]
+multi_cell = tf.keras.layers.StackedRNNCells(lstm_cells)
 
 outputs, states = tf.nn.dynamic_rnn(multi_cell, state, dtype=tf.float32)
 top_layer_h_state = states[-1][1]
