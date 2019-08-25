@@ -5,28 +5,64 @@ import gym
 
 from collections import deque
 
-#### Logging
-from datetime import datetime
-now = datetime.utcnow().strftime('%Y%m%d%H%M%S')
-root_logdir = 'tf_logs'
-logdir = '{}/run-{}/'.format(root_logdir, now)
-
 class RNNAgent(object):
     def __init__(self, action_space):
-        
-        ### model hyperparameters
+        self.nb_inputs = 4
+        self.nb_neurons = 30
+        self.nb_outputs = 2
+        self.nb_timesteps = 1
+        self.nb_layers = 3
 
+        ### model hyperparameters
         self.epsilon = 0.9  # how much do we explore initially
         self.epsilon_decay_rate = 0.95  # rate by which exploration decreases, used for constant epsilon decay strategy
         self.high_score = 0  # keep track of highest score obtained thus far
         self.did_well_threshold = 0.80  # how close we need to be to our high score to have "done well"
         self.network_has_had_training = False  # has our neural net had any training
-        self.last_good_batch = tuple()  # memory for the last good episode we eperienced 
-        
-        self.experience = 0  # integer for keeping track of how much good experience we've had, used in custom epsilon decay function
-            
+        self.last_good_batch = tuple()  # memory for the last good episode we eperienced      
+        self.experience = 0  # integer for keeping track of how much good experience we've had, used in custom epsilon decay function  
         self.last_100_episode_scores = deque(maxlen = 100) # keep track of average score from last 100 episodes
+        
+        self.sess = tf.compat.v1.InteractiveSession()
+        # define the shape of the data placeholder (tensor)
+        self.state = tf.compat.v1.placeholder(tf.float32, [None, self.nb_timesteps, self.nb_inputs])
+        self.actions = tf.compat.v1.placeholder(tf.int32, [None])
 
+        # define network
+        self.basic_lstm_cell = tf.keras.layers.LSTMCell(units=self.nb_neurons)
+        self.learning_rate = 0.001
+
+        self.lstm_cells = [tf.keras.layers.LSTMCell(units=self.nb_neurons) for layer in range(self.nb_layers)]
+        self.multi_cell = tf.keras.layers.StackedRNNCells(self.lstm_cells)
+
+        self.outputs, self.states = tf.nn.dynamic_rnn(self.multi_cell, self.state, dtype=tf.float32)
+        self.top_layer_h_state = self.states[-1][1]
+        self.logits = tf.layers.dense(self.top_layer_h_state, self.nb_outputs, name="softmax")
+        self.xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=self.actions, logits=self.logits)
+        self.loss = tf.reduce_mean(self.xentropy, name="loss")
+        self.optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate)
+        self.train_step = self.optimizer.minimize(self.loss)
+        self.correct = tf.nn.in_top_k(self.logits, self.actions, 1)
+        self.accuracy = tf.reduce_mean(tf.cast(self.correct, tf.float32))
+
+        self.sess.run(tf.initialize_all_variables())
+
+    def get_action(self, env, decision):
+        if decision:
+            return env.action_space.sample()
+        else:
+            if self.network_has_had_training:
+                random_fate = np.random.random()
+                raw_output = logits.eval(feed_dict={state: current_state})
+
+                if random_fate > wondering_gnome.epsilon:
+                    action = np.argmax(raw_output)
+
+    def take_action(self, env, action):
+        return env.step(action)
+
+    def train(self):
+        self.train_step.run(feed_dict={self.state: self.last_good_batch[0], self.actions: self.last_good_batch[1]}) # , keep_prob: 0.75})
     """
        Function for letting us know if we did well based on the rewards received this episode and the 
        did_well_threshold parameter.
@@ -111,13 +147,9 @@ class RNNAgent(object):
                 uncertainty = min(0.9, 1.0 - confidence)  # Uncertainty is the opposite of confidence, limit to max of 0.9
                 self.epsilon = max(uncertainty, 0.1)  # Limit to min of 0.1  
 
-sess = tf.compat.v1.InteractiveSession()
 
-nb_inputs = 4
-nb_neurons = 30
-nb_outputs = 2
-nb_timesteps = 1
-nb_layers = 3
+
+
 
 ## Data
 X_batch = np.array([
@@ -125,33 +157,6 @@ X_batch = np.array([
     [[3, 4, 5, 2], [0, 0, 0, 0]], # Batch 2
     [[6, 7, 8, 5], [6, 5, 4, 2]], # Batch 3
 ])
-
-# define the shape of the data placeholder (tensor)
-state = tf.compat.v1.placeholder(tf.float32, [None, nb_timesteps, nb_inputs])
-actions = tf.compat.v1.placeholder(tf.int32, [None])
-
-# define network
-basic_lstm_cell = tf.keras.layers.LSTMCell(units=nb_neurons)
-learning_rate = 0.001
-
-lstm_cells = [tf.keras.layers.LSTMCell(units=nb_neurons) for layer in range(nb_layers)]
-multi_cell = tf.keras.layers.StackedRNNCells(lstm_cells)
-
-outputs, states = tf.nn.dynamic_rnn(multi_cell, state, dtype=tf.float32)
-top_layer_h_state = states[-1][1]
-logits = tf.layers.dense(top_layer_h_state, nb_outputs, name="softmax")
-xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=actions, logits=logits)
-loss = tf.reduce_mean(xentropy, name="loss")
-optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
-train_step = optimizer.minimize(loss)
-correct = tf.nn.in_top_k(logits, actions, 1)
-accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
-
-sess.run(tf.initialize_all_variables())
-
-## Logging
-loss_summary = tf.summary.scalar('Loss', loss)
-#file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
 
 env = gym.make("CartPole-v0")
 wondering_gnome = RNNAgent(env.action_space)
@@ -168,21 +173,15 @@ for i_episode in range(10000):
 
         state_for_mem = observation
         current_state = np.expand_dims(observation, axis=0)
-        current_state = current_state.reshape(1,nb_timesteps,nb_inputs)
-        action = env.action_space.sample()
+        current_state = current_state.reshape(1,wondering_gnome.nb_timesteps,wondering_gnome.nb_inputs)
+        action = wondering_gnome.get_action(env, True)
 
-        if wondering_gnome.network_has_had_training:
-            random_fate = np.random.random()
-            raw_output = logits.eval(feed_dict={state: current_state})
-
-            if random_fate > wondering_gnome.epsilon:
-                action = np.argmax(raw_output)
-
+        
         episode_states_list.append(observation)
         episode_actions_list.append(action)
 
         #Action step
-        observation, reward, done, info = env.step(action)
+        observation, reward, done, info = wondering_gnome.take_action(env, action)
 
         #add this state's reward to our episode rewards
         episode_rewards += reward
@@ -228,14 +227,15 @@ for i_episode in range(10000):
         wondering_gnome.decay_epsilon_custom()
 
     ## Train our LSTM after every episode, but only with our most recent good batch
-    train_step.run(feed_dict={state: wondering_gnome.last_good_batch[0], actions: wondering_gnome.last_good_batch[1]}) # , keep_prob: 0.75})
+    wondering_gnome.train()
+    
 
     ## Our LSTM has been trained
     if i_episode > 1:
         wondering_gnome.network_has_had_training = True
 
     ## Do some logging of our current loss
-    if i_episode % 20 == 0:
-        summary_str = loss_summary.eval(feed_dict={state: wondering_gnome.last_good_batch[0], actions: wondering_gnome.last_good_batch[1]})
-        step = i_episode
+    #if i_episode % 20 == 0:
+        #summary_str = loss_summary.eval(feed_dict={state: wondering_gnome.last_good_batch[0], actions: wondering_gnome.last_good_batch[1]})
+        #step = i_episode
         #file_writer.add_summary(summary_str, step)
