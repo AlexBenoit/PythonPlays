@@ -61,14 +61,7 @@ def start_playing():
             break
 
         #Main decision making logic
-        action = dqn_solver.get_action(screen)
-        dqn_solver.take_action(action)
-        oldScreen = screen.copy()
-        screen =  grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
-        reward = frameComparator.compareWithLastFrame(screen)
-        screen = cv2.resize(screen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2)), interpolation=cv2.INTER_LANCZOS4)
-        dqn_solver.remember(oldScreen, action, reward, screen)
-        dqn_solver.experience_replay()
+        NN_decision_making(dqn_solver, screen)
 
         cv2.imshow("window", screen) # Window showing what is captured
         cv2.waitKey(1)
@@ -94,6 +87,18 @@ def record_sreen():
     while True:
         screen =  grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
 
+def NN_decision_making(solver, screen):
+    action = solver.get_action(screen)
+    solver.take_action(action)
+    oldScreen = screen.copy()
+    screen =  grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
+    reward = frameComparator.compareWithLastFrame(screen)
+    screen = cv2.resize(screen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2)), interpolation=cv2.INTER_LANCZOS4)
+    solver.remember(oldScreen, action, reward, screen)
+    solver.experience_replay()
+
+def RNN_decision_making():
+    print("Using RNN")
 
 def main():
     print("starting")
