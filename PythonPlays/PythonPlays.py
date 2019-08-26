@@ -21,22 +21,26 @@ from gameStartAnalyzer import GameStartAnalyzer
 #Specific imports
 from textAnalyzer import TextAnalyzer
 from tensorflowNN import DQNSolver
+from tensorflowRNN import RNNAgent
 from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT, MODEL_PATH
 
 
 
 def start_playing():
-    #Create initial variables 
-    screen = grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
-    
-    dqn_solver = DQNSolver((RECORDING_HEIGHT/2, RECORDING_WIDTH/2))
-    dqn_solver.load_model(MODEL_PATH)
-
-    
-    #load the digit recognition learning
+    # Load the digit recognition learning
     frameComparator = FrameComparator()
     digitAnalzer = TextAnalyzer()
     gameStartAnalyzer = GameStartAnalyzer()
+
+    #Create initial variables 
+    screen = grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
+    list_inputs = None
+    with open('../list_inputs.json', 'r') as infile:
+        list_inputs = json.load(infile)
+
+    dqn_solver = RNNAgent((RECORDING_HEIGHT/2)*(RECORDING_WIDTH/2),len(list_inputs))
+    #dqn_solver = DQNSolver((RECORDING_HEIGHT/2, RECORDING_WIDTH/2))
+    #dqn_solver.load_model(MODEL_PATH)
 
     # loop until game start
     while True:
@@ -61,7 +65,7 @@ def start_playing():
             break
 
         #Main decision making logic
-        NN_decision_making(dqn_solver, screen)
+        screen = NN_decision_making(dqn_solver, screen)
 
         cv2.imshow("window", screen) # Window showing what is captured
         cv2.waitKey(1)
@@ -97,8 +101,17 @@ def NN_decision_making(solver, screen):
     solver.remember(oldScreen, action, reward, screen)
     solver.experience_replay()
 
-def RNN_decision_making():
+    return screen
+
+def RNN_decision_making(solver, screen):
     print("Using RNN")
+    #action = np.random.choice(list_inputs) # Initialize action as a random possible action
+    #random_fate = np.random.random()
+    #if random_fate > wondering_gnome.epsilon:
+    action = wondering_gnome.get_action(screen) 
+    solver.take_action(action)
+    oldScreen = screen.copy()
+    screen = grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
 
 def main():
     print("starting")

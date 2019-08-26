@@ -43,6 +43,12 @@
     <Compile Include="tensorflowRNN.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Tests\test_tensorflowNN.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tests\test_tensorflowRNN.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="textAnalyzer.py">
       <SubType>Code</SubType>
     </Compile>

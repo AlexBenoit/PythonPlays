@@ -4,17 +4,23 @@ import random
 import gym
 import os
 
+import smashMeleeInputs
+
 from collections import deque
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 class RNNAgent(object):
-    def __init__(self, nb_inputs, nb_outputs, nb_neurons, nb_layers, nb_timesteps=1, epsilon=0.9, epsilon_decay_rate=0.95, did_well_threshold=0.80):
+    def __init__(self, nb_inputs: int, nb_outputs: int, nb_neurons=30, nb_layers=2, nb_timesteps=1, epsilon=0.9, epsilon_decay_rate=0.95, did_well_threshold=0.80):
         self.nb_inputs = nb_inputs
         self.nb_outputs = nb_outputs
         self.nb_neurons = nb_neurons
         self.nb_layers = nb_layers
         self.nb_timesteps = nb_timesteps
+
+        # Input arrays for the game
+        self.inputArray = np.zeros(len(smashMeleeInputs.getSmashMeleeInputs()))
+        self.oldInputArray = self.inputArray.copy()
 
         ### model hyperparameters
         self.epsilon = epsilon  # how much do we explore initially
@@ -55,18 +61,38 @@ class RNNAgent(object):
     ###
     def get_action(self, current_state):
         print("Predicting")
+        current_state = np.array(current_state).flatten()
+        current_state = np.expand_dims(current_state, axis=0)
+        current_state = current_state.reshape(1, self.nb_timesteps, self.nb_inputs)
         raw_output = self.logits.eval(feed_dict={self.state: current_state})
         print("Done predicting")
-        return np.argmax(raw_output)
+        return raw_output[0]
 
-    def take_action(self, env, action):
-        return env.step(action)
+    def take_action(self, fake_action):
+        action = self.list_inputs[np.argmax(fake_action)]
+
+        for index, action_input_value in np.ndenumerate(action):
+            if (action_input_value > INPUT_CERTAINTY):
+                self.inputArray[index] = 1
+            else:
+                self.inputArray[index] = 0
+        print(self.inputArray)
+        for index, input_value in np.ndenumerate(self.inputArray):
+            if (input_value != self.oldInputArray[index[0]]):
+                #release or press corresponding key
+                if (input_value == 1):
+                    smashMeleeInputs.pressKey(index[0])
+                elif (input_value == 0):
+                    smashMeleeInputs.releaseKey(index[0])
+        self.oldInputArray = self.inputArray
 
     ###
     # Function that trains the model based on the last good batch
     ###
     def train(self):
+        print("Training")
         self.train_step.run(feed_dict={self.state: self.last_good_batch[0], self.actions: self.last_good_batch[1]}) # , keep_prob: 0.75})
+        print("Done training")
     
     ###
     # Function for letting us know if we did well based on the rewards received this episode and the 
