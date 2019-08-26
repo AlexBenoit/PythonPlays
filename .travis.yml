@@ -6,13 +6,13 @@ before_install:
     - python -m pip install --upgrade pip
 install:
     - cd PythonPlays
-    - pip install -r requirements.txt
+    - pip install -r --user requirements.txt
     - cd ..
     - cd PlayRecorder
-    - pip install -r requirements.txt
+    - pip install -r --user requirements.txt
     - cd ..
     - cd CoreComponents
-    - pip install -r requirements.txt
+    - pip install -r --user requirements.txt
     - cd ..
 script:
     - python -m unittest discover 
