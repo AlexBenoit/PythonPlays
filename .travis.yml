@@ -1,3 +1,19 @@
 os: Windows
 language: shell
-
+env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+before_install:
+    - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
+    - choco install python
+    - python -m pip install --upgrade pip
+install:
+    - cd PythonPlays
+    - pip install -r requirements.txt
+    - cd ..
+    - cd PlayRecorder
+    - pip install -r requirements.txt
+    - cd ..
+    - cd CoreComponents
+    - pip install -r requirements.txt
+    - cd ..
+script:
+    - python -m unittest discover 
