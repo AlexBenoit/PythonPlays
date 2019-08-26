@@ -7,6 +7,7 @@ import time
 import random
 import keyboard
 import tensorflow as tf
+import json
 
 #Internal imports
 import keyInputs
@@ -24,8 +25,6 @@ from tensorflowNN import DQNSolver
 from tensorflowRNN import RNNAgent
 from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT, MODEL_PATH
 
-
-
 def start_playing():
     # Load the digit recognition learning
     frameComparator = FrameComparator()
@@ -38,7 +37,7 @@ def start_playing():
     with open('../list_inputs.json', 'r') as infile:
         list_inputs = json.load(infile)
 
-    dqn_solver = RNNAgent((RECORDING_HEIGHT/2)*(RECORDING_WIDTH/2),len(list_inputs))
+    dqn_solver = RNNAgent(RECORDING_HEIGHT*RECORDING_WIDTH, len(list_inputs))
     #dqn_solver = DQNSolver((RECORDING_HEIGHT/2, RECORDING_WIDTH/2))
     #dqn_solver.load_model(MODEL_PATH)
 
@@ -54,7 +53,7 @@ def start_playing():
             print('GAME STARTED')
             break
 
-    screen = cv2.resize(screen, (int(RECORDING_WIDTH/2), int(RECORDING_HEIGHT/2)), interpolation=cv2.INTER_LANCZOS4)
+    #screen = cv2.resize(screen, (int(RECORDING_WIDTH/2), int(RECORDING_HEIGHT/2)), interpolation=cv2.INTER_LANCZOS4)
     last_time = time.time()
 
     while True:
@@ -65,15 +64,15 @@ def start_playing():
             break
 
         #Main decision making logic
-        screen = NN_decision_making(dqn_solver, screen)
-
+        screen = RNN_decision_making(dqn_solver, screen, frameComparator)
+        
         cv2.imshow("window", screen) # Window showing what is captured
         cv2.waitKey(1)
         
-        print('loop took {} seconds'.format(time.time()-last_time))
+        #print('loop took {} seconds'.format(time.time()-last_time))
         last_time = time.time()
         
-    print("done")
+    #print("done")
 
 def record_sreen():
     # loop until game start
@@ -103,15 +102,19 @@ def NN_decision_making(solver, screen):
 
     return screen
 
-def RNN_decision_making(solver, screen):
-    print("Using RNN")
+def RNN_decision_making(solver, screen, frameComparator):
     #action = np.random.choice(list_inputs) # Initialize action as a random possible action
     #random_fate = np.random.random()
     #if random_fate > wondering_gnome.epsilon:
-    action = wondering_gnome.get_action(screen) 
+    action = solver.get_action(screen)
     solver.take_action(action)
     oldScreen = screen.copy()
     screen = grabScreen.grab_screen_GRAY(region=(RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT))
+    reward = frameComparator.compareWithLastFrame(screen)
+    solver.remember(oldScreen, action, reward, screen)
+    solver.experience_replay()
+
+    return screen
 
 def main():
     print("starting")
@@ -123,7 +126,7 @@ def main():
     print(window)
     window.positionWindow(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT)
 
-    #start_playing()
+    start_playing()
     #record_screen()
 
 if __name__ == '__main__':

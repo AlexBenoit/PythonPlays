@@ -3,6 +3,7 @@ import tensorflow as tf
 import random
 import gym
 import os
+import json
 
 import smashMeleeInputs
 
@@ -10,13 +11,26 @@ from collections import deque
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
+INPUT_CERTAINTY = 0.95
+BATCH_SIZE = 20
+
 class RNNAgent(object):
     def __init__(self, nb_inputs: int, nb_outputs: int, nb_neurons=30, nb_layers=2, nb_timesteps=1, epsilon=0.9, epsilon_decay_rate=0.95, did_well_threshold=0.80):
+        with open('../list_inputs.json', 'r') as infile:
+            self.list_inputs = json.load(infile)
+        
         self.nb_inputs = nb_inputs
         self.nb_outputs = nb_outputs
         self.nb_neurons = nb_neurons
         self.nb_layers = nb_layers
         self.nb_timesteps = nb_timesteps
+
+        self.batch_old_screen = []
+        self.batch_action = []
+        self.batch_reward = []
+        self.batch_screen = []
+
+        self.batch_size = 20
 
         # Input arrays for the game
         self.inputArray = np.zeros(len(smashMeleeInputs.getSmashMeleeInputs()))
@@ -46,7 +60,7 @@ class RNNAgent(object):
 
         self.outputs, self.states = tf.nn.dynamic_rnn(self.multi_cell, self.state, dtype=tf.float32)
         self.top_layer_h_state = self.states[-1][1]
-        self.logits = tf.layers.dense(self.top_layer_h_state, self.nb_outputs, name="softmax")
+        self.logits = tf.layers.dense(self.top_layer_h_state, self.nb_outputs)
         self.xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=self.actions, logits=self.logits)
         self.loss = tf.reduce_mean(self.xentropy, name="loss")
         self.optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate=self.learning_rate)
@@ -60,12 +74,12 @@ class RNNAgent(object):
     # Function to get an action from the model based on the current state of the environment.
     ###
     def get_action(self, current_state):
-        print("Predicting")
+        #print("Predicting")
         current_state = np.array(current_state).flatten()
         current_state = np.expand_dims(current_state, axis=0)
         current_state = current_state.reshape(1, self.nb_timesteps, self.nb_inputs)
         raw_output = self.logits.eval(feed_dict={self.state: current_state})
-        print("Done predicting")
+        #print("Done predicting")
         return raw_output[0]
 
     def take_action(self, fake_action):
@@ -76,7 +90,7 @@ class RNNAgent(object):
                 self.inputArray[index] = 1
             else:
                 self.inputArray[index] = 0
-        print(self.inputArray)
+        #print(self.inputArray)
         for index, input_value in np.ndenumerate(self.inputArray):
             if (input_value != self.oldInputArray[index[0]]):
                 #release or press corresponding key
@@ -86,20 +100,65 @@ class RNNAgent(object):
                     smashMeleeInputs.releaseKey(index[0])
         self.oldInputArray = self.inputArray
 
+    def remember(self, old_screen, action, reward, screen):
+        self.batch_old_screen.append(np.array(old_screen).flatten().tolist())
+        self.batch_action.append(np.argmax(action))
+        self.batch_reward.append(reward)
+        self.batch_screen.append(screen)
+
+    def experience_replay(self):
+        if len(self.batch_action) < self.batch_size:
+            return
+
+        # Get batch from total batch
+        local_batch_old_screen = self.batch_old_screen[:self.batch_size]
+        self.batch_old_screen = self.batch_old_screen[self.batch_size:]
+        local_batch_action = self.batch_action[:self.batch_size]
+        self.batch_action = self.batch_action[self.batch_size:]
+        local_batch_reward = self.batch_reward[:self.batch_size]
+        self.batch_reward = self.batch_reward[self.batch_size:]
+        local_batch_screen = self.batch_screen[:self.batch_size]
+        self.batch_screen = self.batch_screen[self.batch_size:]
+
+        # Add total reward to last 100 batches
+        episode_rewards = np.sum(local_batch_reward)
+        self.last_100_episode_scores.append(episode_rewards)
+        self.update_high_score(episode_rewards)
+
+        pre_np_states = np.array(local_batch_old_screen)
+        # TODO: check if 1 is nb_timesteps
+        np_states = pre_np_states.reshape(pre_np_states.shape[0], 1, pre_np_states.shape[1]) # Our LSTM needs a tensor of order 3 for training
+        np_actions = np.array(local_batch_action)
+
+        batch = (np_states, np_actions)
+
+        ## If we did well update our last good batch and amount of experience
+        if self.did_we_do_well(episode_rewards):
+            self.last_good_batch = batch
+
+        self.experience += len(local_batch_old_screen)
+
+        # Decay our epsilon using one of our two strategies 
+        #wondering_gnome.decay_epsilon()
+        self.decay_epsilon()
+
+        ## Train our LSTM after every episode, but only with our most recent good batch
+        self.train()
+
     ###
     # Function that trains the model based on the last good batch
     ###
     def train(self):
         print("Training")
         self.train_step.run(feed_dict={self.state: self.last_good_batch[0], self.actions: self.last_good_batch[1]}) # , keep_prob: 0.75})
-        print("Done training")
+        #print("Done training")
     
     ###
     # Function for letting us know if we did well based on the rewards received this episode and the 
     # did_well_threshold parameter.
     ###
     def did_we_do_well(self, episode_rewards):
-        if episode_rewards > self.did_well_threshold * self.high_score:
+        if episode_rewards >= self.did_well_threshold * self.high_score:
             return True
         return False
 
@@ -196,7 +255,7 @@ if __name__ == "__main__":
             episode_actions_list.append(action)
 
             #Action step
-            observation, reward, done, info = wondering_gnome.take_action(env, action)
+            observation, reward, done, info = env.step(action)
 
             #add this state's reward to our episode rewards
             episode_rewards += reward
