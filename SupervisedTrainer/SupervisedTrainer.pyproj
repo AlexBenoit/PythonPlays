@@ -11,7 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>SupervisedTrainer</Name>
     <RootNamespace>SupervisedTrainer</RootNamespace>
-    <InterpreterId>MSBuild|SupervisedTrainerEnv|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|PythonPlaysEnv|E:\Documents\Visual Studio 2017\Projects\PythonPlays\PythonPlays\PythonPlays.pyproj</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="combineFiles.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="listInputs.py">
       <SubType>Code</SubType>
     </Compile>
@@ -39,15 +42,7 @@
     <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="SupervisedTrainerEnv\">
-      <Id>SupervisedTrainerEnv</Id>
-      <Version>3.6</Version>
-      <Description>SupervisedTrainerEnv (Python 3.6 (64-bit))</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
+    <InterpreterReference Include="MSBuild|PythonPlaysEnv|E:\Documents\Visual Studio 2017\Projects\PythonPlays\PythonPlays\PythonPlays.pyproj" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
