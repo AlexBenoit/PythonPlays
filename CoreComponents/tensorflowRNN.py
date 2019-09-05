@@ -73,14 +73,14 @@ class RNNAgent(object):
     ###
     # Function to get an action from the model based on the current state of the environment.
     ###
-    def get_action(self, current_state):
+    def get_action(self, current_state) -> int:
         #print("Predicting")
         current_state = np.array(current_state).flatten()
         current_state = np.expand_dims(current_state, axis=0)
         current_state = current_state.reshape(1, self.nb_timesteps, self.nb_inputs)
         raw_output = self.logits.eval(feed_dict={self.state: current_state})
         #print("Done predicting")
-        return raw_output[0]
+        return np.argmax(raw_output[0])
 
     def take_action(self, fake_action):
         action = self.list_inputs[np.argmax(fake_action)]

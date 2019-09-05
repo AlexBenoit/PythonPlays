@@ -26,6 +26,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CoreComponents.py" />
+    <Compile Include="environment.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="globalConstants.py">
       <SubType>Code</SubType>
     </Compile>
@@ -33,7 +36,13 @@
     <Compile Include="ImageAnnotator.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="image_processing.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="keyInputs.py" />
+    <Compile Include="model.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="object_detector.py">
       <SubType>Code</SubType>
     </Compile>
@@ -41,6 +50,9 @@
     <Compile Include="smashMeleeInputs.py" />
     <Compile Include="tensorflowNN.py" />
     <Compile Include="tensorflowRNN.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Tests\test_environment.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Tests\test_tensorflowNN.py">

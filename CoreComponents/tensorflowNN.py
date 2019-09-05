@@ -7,6 +7,7 @@ import random
 import random
 import time
 import json
+import cv2
 
 #Internal imports
 import smashMeleeInputs
@@ -53,10 +54,10 @@ class DQNSolver:
             width, height = input_dimension
 
             self.model = tf.keras.Sequential([
-                tf.keras.layers.Conv2D(32, (3, 3), input_shape = (width, height, 1), activation = 'relu'),
-                tf.keras.layers.MaxPooling2D(pool_size=(2,2)),
+                tf.keras.layers.TimeDistributed(tf.keras.layers.Conv2D(32, (5, 5), input_shape = (None, int(RECORDING_HEIGHT/4), int(RECORDING_WIDTH/4), 1), activation = 'relu')),
+                tf.keras.layers.MaxPooling2D(pool_size=(5,5)),
                 tf.keras.layers.Flatten(),
-                tf.keras.layers.Dense(units=LAYER1_NB_NEURONS, activation=tf.nn.relu),
+                tf.keras.layers.LSTM(units=LAYER1_NB_NEURONS, activation=tf.nn.relu),
                 tf.keras.layers.Dense(len(self.list_inputs), activation=tf.nn.softmax)
             ])
 
@@ -72,9 +73,10 @@ class DQNSolver:
 
         #if np.random.rand() < self.exploration_rate:
             #return random.randrange(self.action_space)
-        screen = np.reshape(screen, (int(RECORDING_HEIGHT/2), int(RECORDING_WIDTH/2), 1))
-        q_values = self.model.predict(np.array([screen]))
-        return q_values[0]
+        #screen = np.reshape(screen, (int(RECORDING_HEIGHT/4), int(RECORDING_WIDTH/4), 1))
+        screen = cv2.resize(screen, (int(RECORDING_HEIGHT/4), int(RECORDING_WIDTH/4)))
+        predictions = self.model.predict(np.array([screen]))
+        return predictions[0]
 
     def take_action(self, fake_action):
         action = self.list_inputs[np.argmax(fake_action)]
@@ -134,13 +136,9 @@ class DQNSolver:
         print("Fitting model")
         real_output_data = []
         for data in output_data:
-            data_append = np.zeros(len(self.list_inputs))
             for index, input in enumerate(self.list_inputs):
                 if np.array_equal(input, data):
-                    data_append[index] = 1
-                    print(data_append)
-                    real_output_data.append(data_append)
-        real_output_data = np.array(real_output_data)
+                    real_output_data.append(index)
         self.model.fit(input_data, np.array(real_output_data))
 
     def save_weights(self, path):

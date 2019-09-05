@@ -5,8 +5,7 @@
     <ProjectGuid>dff6d3da-6006-456f-bdae-530e446896e3</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>pythonPlays.py</StartupFile>
-    <SearchPath>
-    </SearchPath>
+    <SearchPath>..\CoreComponents</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>PythonPlays</Name>
