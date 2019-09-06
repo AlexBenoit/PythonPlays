@@ -3,6 +3,11 @@ import numpy as np
 
 from collections import deque
 
+GAMMA = 0.95
+LEARNING_RATE = 0.01
+MEMORY_SIZE = 1000000
+BATCH_SIZE = 20
+
 class Model(object):
     """description of class"""
     def __init__(self, input_shape, output_shape, timesteps=20, type="CNN"):
@@ -10,6 +15,17 @@ class Model(object):
         self.output_shape = output_shape
         self.timesteps = timesteps
         self.type = type
+
+        self.memory = deque(maxlen=MEMORY_SIZE)
+        self.last_100_episode_scores = deque(maxlen = BATCH_SIZE) # keep track of average score from last 100 episodes
+        self.batch_size = BATCH_SIZE
+        self.high_score = 0  # keep track of highest score obtained thus far
+        self.experience = 0  # integer for keeping track of how much good experience we've had, used in custom epsilon decay function
+        self.did_well_threshold = 0.80  # how close we need to be to our high score to have "done well"
+        self.batch_state = []
+        self.batch_action = []
+        self.batch_reward = []
+        self.batch_new_state = []
         # Model with a conv2d layer in a RNN
         if self.type == "CRNN":
             self.model = tf.keras.Sequential([
@@ -89,6 +105,67 @@ class Model(object):
     def predict(self, X):
         new_X = X.reshape((-1,) + self.input_shape).copy()
         return self.model.predict(new_X)
+
+    def remember(self, state, action, reward, new_state):
+        self.batch_state.append(state)
+        self.batch_action.append(action)
+        self.batch_reward.append(reward)
+        self.batch_new_state.append(new_state)
+
+    def experience_replay(self):
+        if self.type == "CNN":
+            if len(self.batch_action) < BATCH_SIZE:
+                return
+
+            print("Experiencing")
+            screens = []
+            inputs = []
+
+            # Get batch from total batch
+            local_batch_state = self.batch_state[:self.batch_size]
+            self.batch_state = self.batch_state[self.batch_size:]
+            local_batch_action = self.batch_action[:self.batch_size]
+            self.batch_action = self.batch_action[self.batch_size:]
+            local_batch_reward = self.batch_reward[:self.batch_size]
+            self.batch_reward = self.batch_reward[self.batch_size:]
+            local_batch_new_state = self.batch_new_state[:self.batch_size]
+            self.batch_new_state = self.batch_new_state[self.batch_size:]
+
+            # Add total reward to last 100 batches
+            episode_rewards = np.sum(local_batch_reward)
+            self.last_100_episode_scores.append(episode_rewards)
+            self.update_high_score(episode_rewards)
+
+            batch = (np.array(local_batch_state), np.array(local_batch_action))
+
+            ## If we did well update our last good batch and amount of experience
+            if self.did_we_do_well(episode_rewards):
+                self.last_good_batch = batch
+
+            self.experience += len(local_batch_state)
+
+            self.train()
+
+    ###
+    # Function that updates our highest score acheived thus far.
+    ###
+    def update_high_score(self, episode_rewards):
+        if episode_rewards > self.high_score:
+            self.high_score = episode_rewards
+        print("HIGH SCORE: " + str(self.high_score))
+
+    ###
+    # Function for letting us know if we did well based on the rewards received this episode and the 
+    # did_well_threshold parameter.
+    ###
+    def did_we_do_well(self, episode_rewards):
+        if episode_rewards >= self.did_well_threshold * self.high_score:
+            return True
+        return False
+
+    def train(self):
+        print("Training model based on last good batch")
+        self.fit(self.last_good_batch[0], self.last_good_batch[1])
 
     def save_model(self, path):
         self.model.save(path + "model_" + self.type + ".h5")
