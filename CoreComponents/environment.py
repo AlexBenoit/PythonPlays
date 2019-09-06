@@ -61,7 +61,7 @@ class Environment(Thread):
     def step(self, action_index: int):
 
         self.input_action = self.input_action_list[action_index]
-        print(self.input_action)
+        #print(self.input_action)
         for index, input_action_value in enumerate(self.input_action):
             if (input_action_value != self.old_input_action[index]):
                 #release or press corresponding key
@@ -90,3 +90,8 @@ class Environment(Thread):
 
     def get_current_state(self):
         return self.state
+
+    def stop(self):
+        for index in range(len(self.input_action)):
+            if(self.input_action[index] == 1):
+                smashMeleeInputs.releaseKey(index)

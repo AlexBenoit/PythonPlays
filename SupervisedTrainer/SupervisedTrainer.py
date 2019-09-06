@@ -27,7 +27,7 @@ def main():
             list_inputs = json.load(infile)
     files_in_directory = [name for name in os.listdir('./Training Data') if os.path.isfile("./Training Data/" + name)]
     files_in_directory.sort(key=sorting_function)
-    files_in_directory = files_in_directory[:20]
+    files_in_directory = files_in_directory[:]
     dqn_solver = Model((int(RECORDING_HEIGHT/4), int(RECORDING_WIDTH/4), 1), (69,))
 
     for file in files_in_directory:

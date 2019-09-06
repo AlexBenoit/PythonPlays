@@ -8,6 +8,8 @@ import random
 import keyboard
 import tensorflow as tf
 import json
+import os
+import psutil
 
 #Internal imports
 import keyInputs
@@ -28,6 +30,13 @@ from model import Model
 from tensorflowNN import DQNSolver
 from tensorflowRNN import RNNAgent
 from globalConstants import WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT, RECORDING_X, RECORDING_Y, RECORDING_WIDTH, RECORDING_HEIGHT, MODEL_PATH
+
+def kill_proc_tree(pid, including_parent=True):    
+    parent = psutil.Process(pid)
+    for child in parent.children(recursive=True):
+        child.kill()
+    if including_parent:
+        parent.kill()
 
 def start_playing():
     # Load the digit recognition learning
@@ -125,17 +134,26 @@ def new_playing():
     env = Environment("Smash Melee")
     agent = Model((int(RECORDING_HEIGHT/4), int(RECORDING_WIDTH/4), 1), (env.action_space.n,))
     agent.load_model(MODEL_PATH)
-    #env.render()
+    env.render()
     env.start()
-    #env.wait_for_ready()
+    env.wait_for_ready()
     
     while True:
-        state = env.get_current_state()
-        screen = cv2.resize(state, (int(RECORDING_HEIGHT/4), int(RECORDING_WIDTH/4)))
-        action = np.argmax(agent.predict(np.array([screen]))[0])
-        print(action)
-        new_state, reward = env.step(action)
+        if keyboard.is_pressed("p"):
+            print("TERMINATED")
+            #TODO: add dolphin termination
+            cv2.destroyAllWindows()
+            env.stop()
+            agent.save_model(MODEL_PATH)
+            me = os.getpid()
+            kill_proc_tree(me)
+            break
 
+        state = env.get_current_state()
+        state = cv2.resize(state, (int(RECORDING_WIDTH/4), int(RECORDING_HEIGHT/4)))
+        action = np.argmax(agent.predict(np.array([state]))[0])
+        new_state, reward = env.step(action)
+        new_state = cv2.resize(new_state, (int(RECORDING_WIDTH/4), int(RECORDING_HEIGHT/4)))
         #agent.remember(state, action, reward, new_state)
         #agent.experience_replay()
 
