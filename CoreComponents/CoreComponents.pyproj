@@ -11,8 +11,9 @@
     <OutputPath>.</OutputPath>
     <Name>CoreComponents</Name>
     <RootNamespace>CoreComponents</RootNamespace>
-    <InterpreterId>
-    </InterpreterId>
+    <InterpreterId>MSBuild|PythonPlaysEnv|F:\Repos\PythonPlays\PythonPlays\PythonPlays.pyproj</InterpreterId>
+    <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
+    <TestFramework>unittest</TestFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -71,6 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="MSBuild|PythonPlaysEnv|F:\Repos\PythonPlays\PythonPlays\PythonPlays.pyproj" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -16,9 +16,9 @@ from FrameComparator import FrameComparator
 import smashMeleeInputs
 import windowPositioning
 import ImageAnnotator as imA
-from gameStartAnalyzer import GameStartAnalyzer
 
 #Specific imports
+from gameStartAnalyzer import GameStartAnalyzer
 from textAnalyzer import TextAnalyzer
 from tensorflowNN import DQNSolver
 from tensorflowRNN import RNNAgent

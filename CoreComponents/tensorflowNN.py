@@ -1,9 +1,7 @@
 #External imports
-import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
 import gym
-import random
 import random
 import time
 import json

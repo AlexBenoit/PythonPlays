@@ -1,10 +1,5 @@
 import cv2
 import numpy as np
-from PIL import Image
-import glob
-import scipy.io as spio
-import time
-from sklearn.neural_network import MLPClassifier
 import pickle
 
 class TextAnalyzer:
