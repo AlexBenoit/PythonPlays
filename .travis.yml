@@ -1,16 +1,18 @@
-language: python
-python: 
-  - "3.6"
 os: windows
+language: shell
+env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+before_install:
+    - choco install python
+    - python -m pip install --upgrade pip
 install:
-  - cd PythonPlays
-  - pip install -r requirements.txt
-  - cd ..
-  - cd PlayRecorder
-  - pip install -r requirements.txt
-  - cd ..
-  - cd CoreComponents
-  - pip install -r requirements.txt
-  - cd ..
+    - cd PythonPlays
+    - pip install -r requirements.txt --user
+    - cd ..
+    - cd PlayRecorder
+    - pip install -r requirements.txt --user
+    - cd ..
+    - cd CoreComponents
+    - pip install -r requirements.txt --user
+    - cd ..
 script:
-  - python -m unittest discover 
+    - python -m unittest discover 
