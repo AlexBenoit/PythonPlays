@@ -30,7 +30,6 @@ EXPLORATION_DECAY = 0.995
 LAYER1_NB_NEURONS = 128
 
 class DQNSolver:
-
     def __init__(self, input_dimension):
         with open('../list_inputs.json', 'r') as infile:
             self.list_inputs = json.load(infile)

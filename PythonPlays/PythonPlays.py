@@ -38,7 +38,7 @@ def start_playing():
     with open('../list_inputs.json', 'r') as infile:
         list_inputs = json.load(infile)
 
-    dqn_solver = RNNAgent((RECORDING_HEIGHT/2)*(RECORDING_WIDTH/2),len(list_inputs))
+    #dqn_solver = RNNAgent((RECORDING_HEIGHT/2)*(RECORDING_WIDTH/2),len(list_inputs))
     #dqn_solver = DQNSolver((RECORDING_HEIGHT/2, RECORDING_WIDTH/2))
     #dqn_solver.load_model(MODEL_PATH)
 
@@ -120,10 +120,9 @@ def main():
         time.sleep(1)
 
     window = windowPositioning.openWindow("Smash Melee")
-    print(window)
     window.positionWindow(WINDOW_X, WINDOW_Y, WINDOW_WIDTH, WINDOW_HEIGHT)
 
-    #start_playing()
+    start_playing()
     #record_screen()
 
 if __name__ == '__main__':

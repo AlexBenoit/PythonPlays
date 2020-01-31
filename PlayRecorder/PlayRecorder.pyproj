@@ -12,6 +12,7 @@
     <Name>PlayRecorder</Name>
     <RootNamespace>PlayRecorder</RootNamespace>
     <InterpreterId>MSBuild|PythonPlaysEnv|F:\Repos\PythonPlays\PythonPlays\PythonPlays.pyproj</InterpreterId>
+    <TestFramework>unittest</TestFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,10 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="constraints.txt" />
-    <Content Include="requirements.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CoreComponents\CoreComponents.pyproj">
