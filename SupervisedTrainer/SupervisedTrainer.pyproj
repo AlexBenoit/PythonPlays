@@ -12,6 +12,8 @@
     <Name>SupervisedTrainer</Name>
     <RootNamespace>SupervisedTrainer</RootNamespace>
     <InterpreterId>MSBuild|PythonPlaysEnv|E:\Documents\Visual Studio 2017\Projects\PythonPlays\PythonPlays\PythonPlays.pyproj</InterpreterId>
+    <InterpreterId>
+    </InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,9 +42,6 @@
   <ItemGroup>
     <Content Include="constraints.txt" />
     <Content Include="requirements.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <InterpreterReference Include="MSBuild|PythonPlaysEnv|E:\Documents\Visual Studio 2017\Projects\PythonPlays\PythonPlays\PythonPlays.pyproj" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

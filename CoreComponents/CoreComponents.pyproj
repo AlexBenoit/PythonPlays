@@ -11,7 +11,8 @@
     <OutputPath>.</OutputPath>
     <Name>CoreComponents</Name>
     <RootNamespace>CoreComponents</RootNamespace>
-    <InterpreterId>MSBuild|CoreComponentsEnv|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>
+    </InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -82,17 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Interpreter Include="CoreComponentsEnv\">
-      <Id>CoreComponentsEnv</Id>
-      <Version>3.7</Version>
-      <Description>CoreComponentsEnv (Python 3.7 (64-bit))</Description>
-      <InterpreterPath>Scripts\python.exe</InterpreterPath>
-      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
-      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
-      <Architecture>X64</Architecture>
-    </Interpreter>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
