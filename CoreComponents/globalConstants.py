@@ -9,5 +9,5 @@ RECORDING_Y = 0
 RECORDING_WIDTH = 876
 RECORDING_HEIGHT = 720
 
-MODEL_PATH = "../models/model.h5"
-MODEL_WEIGHTS_PATH = "../model_weights/model_weights"
+MODEL_PATH = "../Models/"
+MODEL_WEIGHTS_PATH = "../model_weights/"

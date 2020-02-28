@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import pickle
 
-class TextAnalyzer:
+class TextAnalyzer():
 
     def __init__(self):
      

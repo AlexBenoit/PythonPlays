@@ -269,6 +269,7 @@ SupervisedTrainerEnv/
 # Project specific files
 SupervisedTrainer/Training Data/
 PlayRecorder/output/
+Models/
 
 # OpenAI gym files
 monitors/

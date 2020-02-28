@@ -5,7 +5,8 @@ import os
 import ctypes
 import ctypes.wintypes
 import win32con
-import sys   
+import sys
+import ctypes
 
 class Window:
     def __init__(self, windowHandle):
@@ -18,15 +19,16 @@ class Window:
         lExStyle &= ~(win32con.WS_EX_DLGMODALFRAME | win32con.WS_EX_CLIENTEDGE | win32con.WS_EX_STATICEDGE)
         win32gui.SetWindowLong(self.windowHandle, win32con.GWL_STYLE, lStyle);
         win32gui.SetWindowLong(self.windowHandle, win32con.GWL_EXSTYLE, lExStyle);
-
-        win32gui.SetWindowPos(self.windowHandle, 0, x, y, width, height, 0x0040)
+        ctypes.windll.user32.SetProcessDPIAware()
+        win32gui.SetWindowPos(self.windowHandle, win32con.HWND_TOP, x, y, width, height, win32con.SWP_SHOWWINDOW)
+        #win32gui.MoveWindow(self.windowHandle, x, y, width, height, True)
 
 def openWindow(window): 
     pwd = os.getcwd()
 
     if(window == "Smash Melee"):
         dolphin = subprocess.Popen([pwd +'\..\Dolphin\Dolphin.exe', '-b', '-e=' + pwd + '\..\Dolphin\ISOs\Super Smash Bros. Melee (USA).iso']) #Hard coded path
-        time.sleep(2) #laisse le temps a l'emulateur de launch
+        time.sleep(3) #laisse le temps a l'emulateur de launch
         return Window(win32gui.FindWindow(None, 'Dolphin'))
     elif (window == "For Honor"):
         print(pwd)
