@@ -36,10 +36,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="keyInputs.py" />
-    <Compile Include="object_detector.py">
+    <Compile Include="performRecognition.py" />
+    <Compile Include="pyTorchAgent.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="performRecognition.py" />
+    <Compile Include="sandbox.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="smashMeleeInputs.py" />
     <Compile Include="tensorflowNN.py" />
     <Compile Include="tensorflowRNN.py">
