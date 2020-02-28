@@ -7,7 +7,7 @@ import time
 from sklearn.neural_network import MLPClassifier
 import pickle
 
-class TextAnalyzer:
+class TextAnalyzer():
 
     def __init__(self):
      

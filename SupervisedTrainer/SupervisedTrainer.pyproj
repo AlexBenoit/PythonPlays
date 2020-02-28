@@ -11,6 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>SupervisedTrainer</Name>
     <RootNamespace>SupervisedTrainer</RootNamespace>
+    <InterpreterId>MSBuild|PythonPlaysEnv|E:\Documents\Visual Studio 2017\Projects\PythonPlays\PythonPlays\PythonPlays.pyproj</InterpreterId>
     <InterpreterId>
     </InterpreterId>
   </PropertyGroup>
@@ -23,6 +24,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="combineFiles.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="listInputs.py">
       <SubType>Code</SubType>
     </Compile>

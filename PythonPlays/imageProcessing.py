@@ -11,73 +11,30 @@ DIGIT_WIDTH = 45
 DIGIT_HEIGHT = 55
 
 def processNumber(image):
-     crop_img6 = image[610:610+DIGIT_HEIGHT, 339:339+DIGIT_WIDTH]
-     crop_img5 = image[610:610+DIGIT_HEIGHT, 294:294+DIGIT_WIDTH]
-     crop_img4 = image[610:610+DIGIT_HEIGHT, 249:249+DIGIT_WIDTH]
-     crop_img3 = image[610:610+DIGIT_HEIGHT, 131:131+DIGIT_WIDTH]
-     crop_img2 = image[610:610+DIGIT_HEIGHT, 86:86+DIGIT_WIDTH]
-     crop_img1 = image[610:610+DIGIT_HEIGHT, 41:41+DIGIT_WIDTH]
+    crop_img6 = image[610:610+DIGIT_HEIGHT, 339:339+DIGIT_WIDTH]
+    crop_img5 = image[610:610+DIGIT_HEIGHT, 294:294+DIGIT_WIDTH]
+    crop_img4 = image[610:610+DIGIT_HEIGHT, 249:249+DIGIT_WIDTH]
+    crop_img3 = image[610:610+DIGIT_HEIGHT, 131:131+DIGIT_WIDTH]
+    crop_img2 = image[610:610+DIGIT_HEIGHT, 86:86+DIGIT_WIDTH]
+    crop_img1 = image[610:610+DIGIT_HEIGHT, 41:41+DIGIT_WIDTH]
 
-     crop_img1[np.where((crop_img1 >= 5))] = 255
-     crop_img6[np.where((crop_img6 >= 5))] = 255
-     crop_img5[np.where((crop_img5 >= 5))] = 255
-     crop_img4[np.where((crop_img4 >= 5))] = 255
-     crop_img3[np.where((crop_img3 >= 5))] = 255
-     crop_img2[np.where((crop_img2 >= 5))] = 255
+    crop_img1[np.where((crop_img1 >= 5))] = 255
+    crop_img6[np.where((crop_img6 >= 5))] = 255
+    crop_img5[np.where((crop_img5 >= 5))] = 255
+    crop_img4[np.where((crop_img4 >= 5))] = 255
+    crop_img3[np.where((crop_img3 >= 5))] = 255
+    crop_img2[np.where((crop_img2 >= 5))] = 255
 
-     list = []
+    list = []
 
-     list.append(crop_img1)
-     list.append(crop_img2)
-     list.append(crop_img3)
-     list.append(crop_img4)
-     list.append(crop_img5)
-     list.append(crop_img6)
+    list.append(crop_img1)
+    list.append(crop_img2)
+    list.append(crop_img3)
+    list.append(crop_img4)
+    list.append(crop_img5)
+    list.append(crop_img6)
 
-     return list
-
-def process_img(image):
-    original_image = image
-
-    # convert to gray and edge detection
-    processed_img =  cv2.Canny(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY), threshold1 = 200, threshold2=300)
-
-    processed_img = cv2.GaussianBlur(processed_img, (5,5), 0)
-
-    processed_img = roi(processed_img, [VERTICES])
-
-    # more info: http://docs.opencv.org/3.0-beta/doc/py_tutorials/py_imgproc/py_houghlines/py_houghlines.html
-    #                                     rho   theta   thresh  min length, max gap:        
-    lines = cv2.HoughLinesP(processed_img, 1, np.pi/180, 180,      20,       15)
-    m1 = 0
-    m2 = 0
-    try:
-        l1, l2, m1, m2 = draw_lanes(original_image,lines)
-        cv2.line(original_image, (l1[0], l1[1]), (l1[2], l1[3]), [0,255,0], 30)
-        cv2.line(original_image, (l2[0], l2[1]), (l2[2], l2[3]), [0,255,0], 30)
-    except Exception as e:
-        print(str(e))
-        pass
-    try:
-        for coords in lines:
-            coords = coords[0]
-            try:
-                cv2.line(processed_img, (coords[0], coords[1]), (coords[2], coords[3]), [255,0,0], 3)     
-            except Exception as e:
-                print(str(e))
-    except Exception as e:
-        pass
-
-    return processed_img, original_image, m1, m2
-
-def roi(img, vertices):
-    #blank mask:
-    mask = np.zeros_like(img)
-    # fill the mask
-    cv2.fillPoly(mask, vertices, 255)
-    # now only show the area that is the mask
-    masked = cv2.bitwise_and(img, mask)
-    return masked
+    return list
 
 def draw_lines(img, lines):
     try:

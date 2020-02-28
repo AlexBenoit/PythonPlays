@@ -5,8 +5,7 @@
     <ProjectGuid>25033419-b42e-4f9e-a68a-48f8cb53c495</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>PlayRecorder.py</StartupFile>
-    <SearchPath>
-    </SearchPath>
+    <SearchPath>..\CoreComponents</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>PlayRecorder</Name>
