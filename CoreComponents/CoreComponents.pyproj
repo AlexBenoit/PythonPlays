@@ -11,8 +11,9 @@
     <OutputPath>.</OutputPath>
     <Name>CoreComponents</Name>
     <RootNamespace>CoreComponents</RootNamespace>
-    <InterpreterId>
-    </InterpreterId>
+    <InterpreterId>MSBuild|PythonPlaysEnv|F:\Repos\PythonPlays\PythonPlays\PythonPlays.pyproj</InterpreterId>
+    <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
+    <TestFramework>unittest</TestFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,9 +46,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="object_detector.py">
+    <Compile Include="performRecognition.py" />
+    <Compile Include="pyTorchAgent.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="performRecognition.py" />
+    <Compile Include="sandbox.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="smashMeleeInputs.py" />
     <Compile Include="tensorflowNN.py" />
     <Compile Include="tensorflowRNN.py">
@@ -79,10 +84,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="requirements.txt" />
+    <Folder Include="Tests\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Tests\" />
+    <InterpreterReference Include="MSBuild|PythonPlaysEnv|F:\Repos\PythonPlays\PythonPlays\PythonPlays.pyproj" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

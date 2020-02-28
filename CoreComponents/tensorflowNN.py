@@ -1,9 +1,7 @@
 #External imports
-import matplotlib.pyplot as plt
 import tensorflow as tf
 import numpy as np
 import gym
-import random
 import random
 import time
 import json
@@ -33,7 +31,6 @@ EXPLORATION_DECAY = 0.995
 LAYER1_NB_NEURONS = 128
 
 class DQNSolver:
-
     def __init__(self, input_dimension):
         with open('../list_inputs.json', 'r') as infile:
             self.list_inputs = json.load(infile)

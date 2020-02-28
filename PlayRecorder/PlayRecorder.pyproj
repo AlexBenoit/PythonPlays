@@ -10,8 +10,8 @@
     <OutputPath>.</OutputPath>
     <Name>PlayRecorder</Name>
     <RootNamespace>PlayRecorder</RootNamespace>
-    <InterpreterId>
-    </InterpreterId>
+    <InterpreterId>MSBuild|PythonPlaysEnv|F:\Repos\PythonPlays\PythonPlays\PythonPlays.pyproj</InterpreterId>
+    <TestFramework>unittest</TestFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,15 +43,14 @@
     <Folder Include="Tests\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="constraints.txt" />
-    <Content Include="requirements.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CoreComponents\CoreComponents.pyproj">
       <Name>CoreComponents</Name>
       <Project>{792c0e65-c099-4e9c-9328-3ca665f27e36}</Project>
       <Private>True</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="MSBuild|PythonPlaysEnv|F:\Repos\PythonPlays\PythonPlays\PythonPlays.pyproj" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -40,8 +40,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="constraints.txt" />
-    <Content Include="requirements.txt" />
+    <InterpreterReference Include="MSBuild|PythonPlaysEnv|F:\Repos\PythonPlays\PythonPlays\PythonPlays.pyproj" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

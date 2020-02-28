@@ -266,7 +266,11 @@ CoreComponentsEnv/
 PlayRecorderEnv/
 SupervisedTrainerEnv/
 
-#Project specific files
+# Project specific files
 SupervisedTrainer/Training Data/
 PlayRecorder/output/
 Models/
+
+# OpenAI gym files
+monitors/
+tmp/
