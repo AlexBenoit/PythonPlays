@@ -23,7 +23,7 @@ class FrameComparator:
         self.myTransition = False
         self.digitAnalzer = TextAnalyzer()
 
-    #damagaList contains 6 character, first 3 is ourcharacter, last 3 is ennemy
+    #damageList contains 6 character, first 3 is our character, last 3 is ennemy
     def compareWithLastFrame(self, currentFrame):
 
         # takes the screen above and identifies the zone of the numbers into 6 images
